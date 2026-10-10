@@ -1,0 +1,9 @@
+{
+    "preset": "laravel",
+    "exclude": [
+        "output",
+        "storage",
+        "public/build",
+        "node_modules"
+    ]
+}

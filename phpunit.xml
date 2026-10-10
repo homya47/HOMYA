@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_MAINTENANCE_DRIVER" value="file"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="BROADCAST_CONNECTION" value="null"/>
+        <env name="CACHE_STORE" value="array"/>
+        <!-- La bascule locale SQL ne doit pas charger un accès réel dans cette suite hors base. -->
+        <env name="HOMYA_CATALOGUE_SOURCE" value="files" force="true"/>
+        <!-- Tests isolés : aucune lecture de stock réel, ni clé Stripe du poste. -->
+        <env name="HOMYA_ADMIN_MANAGEMENT_ENABLED" value="false" force="true"/>
+        <env name="HOMYA_INVENTORY_ENABLED" value="false" force="true"/>
+        <env name="HOMYA_CHECKOUT_ENABLED" value="false" force="true"/>
+        <env name="HOMYA_DEFERRED_ORDERS_ENABLED" value="false" force="true"/>
+        <env name="HOMYA_COMMERCE_LEGAL_READY" value="false" force="true"/>
+        <env name="HOMYA_BANK_TRANSFER_ENABLED" value="false" force="true"/>
+        <env name="STRIPE_SECRET_KEY" value="" force="true"/>
+        <env name="STRIPE_WEBHOOK_SECRET" value="" force="true"/>
+        <!-- Tests du socle sans requête ni migration ; aucune preuve MariaDB implicite. -->
+        <env name="DB_CONNECTION" value="mariadb"/>
+        <env name="DB_DATABASE" value="homya_test_not_created"/>
+        <env name="DB_URL" value=""/>
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="PULSE_ENABLED" value="false"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="NIGHTWATCH_ENABLED" value="false"/>
+    </php>
+</phpunit>

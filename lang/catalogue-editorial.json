@@ -1,0 +1,178 @@
+{
+  "5767a93e865d4dd6c35f8e8e67b6a07c1c91090d8a819a6dad3c57f9a4c68d0f": {
+    "en": {
+      "expected_sha256": "55feb708d4a72a47f6ffc187f588f2ca86a04b53a7375fd91f72e294754abba1",
+      "replacements": {
+        "Free laying": "Freestanding"
+      }
+    },
+    "de": {
+      "expected_sha256": "fbad5251067263bac15c50ec1e11189a29de0f18c7bad46b2d3a84f5eb5ef0b3",
+      "replacements": {
+        "Freilegung": "Freistehend"
+      }
+    }
+  },
+  "83580cdf2bf111062c59b4627343ca2807c0d2f3d8f9111271ed27860c7e493e": {
+    "en": {
+      "expected_sha256": "cc3b68a02a1171ba744064bcf574f41d727f09fb0146b5d10953d23acad33dd4",
+      "replacements": {
+        "Argent": "Silver"
+      }
+    },
+    "de": {
+      "expected_sha256": "a6056803431345e97244d7937d1318c784a7f7fd52006f8064efcc0f81988710",
+      "replacements": {
+        "Argent": "Silber"
+      }
+    }
+  },
+  "5712e336828983a2dd0cd5023327247cbbce9f6b9d6308aa1db59ac058fc7912": {
+    "en": {
+      "expected_sha256": "9eb03c0341cf6ba3ad48fc192a70bdf5a3e9e8e30b54f92ff2d36c7343fe74fa",
+      "replacements": {
+        "Sour": "Sulphur"
+      }
+    },
+    "de": {
+      "expected_sha256": "d203683343a37fa7a8b4c1d22d1020582fed5622d0b14ef7a4f02b54f8a96832",
+      "replacements": {
+        "Sauerer": "Schwefel",
+        "50Petrolkoks": "50% Petrolkoks"
+      }
+    }
+  },
+  "f5629968e73edb52a398db2af6b19caadf4022c30835b1a278fcb7d605ba2365": {
+    "en": {
+      "expected_sha256": "83860182789e8c7897c8af95c87d50d720da52740f66de744e4b713ae9e24afa",
+      "replacements": {
+        "Sour": "Sulphur"
+      }
+    },
+    "de": {
+      "expected_sha256": "d776da09497937382d4e609f4dc03c20c90d56795704058b093e4a7d139d5686",
+      "replacements": {
+        "Sauerer": "Schwefel",
+        "50Petrolkoks": "50% Petrolkoks"
+      }
+    }
+  },
+  "5089fe9445c70df9809e5fc143c19a0f411726fe3bef439ca56d2f071de7c8fb": {
+    "en": {
+      "expected_sha256": "6239d5e5449659e79636254ab16acccc85e06f3644db319a80ce2a15a839e9aa",
+      "replacements": {
+        "extra plat": "slim"
+      }
+    },
+    "de": {
+      "expected_sha256": "7964aa1d68a1e73d8fc4ed12625271c8e1dd319f224d767a12f31e79dc610050",
+      "replacements": {
+        "extra plat": "besonders flach"
+      }
+    }
+  },
+  "a504f7d2a5657aea8d259b0a7597d595f424eaf2db5375aea78dd827b01cbf13": {
+    "en": {
+      "expected_sha256": "eb7929f00a06893cb911ebd755c810bd557b9a3ae3973e447288a6625108cfb4",
+      "replacements": {
+        "extra plat": "slim"
+      }
+    },
+    "de": {
+      "expected_sha256": "e66ca5012b52def44f0ea23fb6d5fbedc32a25a9f4c52c25c9c73de72ae50165",
+      "replacements": {
+        "extra plat": "besonders flach"
+      }
+    }
+  },
+  "04ddeeccfa8ca93113e6dae6278b892af2a92139bfa404ff10f553daf25d7f3e": {
+    "en": {
+      "expected_sha256": "5c8969c8d61ec32a338292178a3ae0f6dcf151a91100f8e0a07e95437296b699",
+      "replacements": {
+        "2 vitres": "2 glass panels"
+      }
+    },
+    "de": {
+      "expected_sha256": "b5cb23e1a0b7e28a3cddfb1f1f3416715becbbf9fde5175aba0a4cb710456290",
+      "replacements": {
+        "2 vitres": "2 Sichtscheiben"
+      }
+    }
+  },
+  "7f79e9d59d1396f260a1f0ef797475fc9df25c67bbdba480f5385ba0b458f626": {
+    "en": {
+      "expected_sha256": "3d0c7b37f7aa4e992df5c8241c35b3dab4a60dae54a82dc1f23aedcbd8b21408",
+      "replacements": {
+        "raccordable": "connectable",
+        "3 vitres": "3 glass panels"
+      }
+    },
+    "de": {
+      "expected_sha256": "eb7169768e65d4b0517497d8c2a0f9290dcb381ff36bb4622c4564e97eb0b3bc",
+      "replacements": {
+        "raccordable": "anschließbar",
+        "3 vitres": "3 Sichtscheiben"
+      }
+    }
+  },
+  "f31b43f675938f8c0853b7818bda05ed97e8194b0d79d6cd9e78af958b96980f": {
+    "en": {
+      "expected_sha256": "2f52d92a4e4fdc245861884a7ece32273910620dd91b14d4e6f9ed20ed215cf6",
+      "replacements": {
+        "raccordable": "connectable",
+        "3 vitres": "3 glass panels"
+      }
+    },
+    "de": {
+      "expected_sha256": "91f3edabb78b42c7d78705de598519fe95b6b594ac4b279d82df1d888d971371",
+      "replacements": {
+        "raccordable": "anschließbar",
+        "3 vitres": "3 Sichtscheiben"
+      }
+    }
+  },
+  "68e2a7eaa0da3959305ffbf2577e334e8e0de84fcbcccc18b95070644928f269": {
+    "en": {
+      "expected_sha256": "ac33dbda725a318f7d299b8463d86640bf2128ba72b4eabd6754a65f4fe4d19d",
+      "replacements": {
+        "raccordable": "connectable",
+        "3 vitres": "3 glass panels"
+      }
+    },
+    "de": {
+      "expected_sha256": "0f05c932a45232e6e481a7f601392722641de18f12a3d62869b502f5709a0ed6",
+      "replacements": {
+        "raccordable": "anschließbar",
+        "3 vitres": "3 Sichtscheiben"
+      }
+    }
+  },
+  "0ee20d97341eca3c3ff13fae30a063c81653691aed583459344d70f4af4641a5": {
+    "en": {
+      "expected_sha256": "5f808d49661001c1f3f0370ab876a47765c3de77cff79b404613e0ea3a83e51a",
+      "replacements": {
+        "raccordable": "connectable"
+      }
+    },
+    "de": {
+      "expected_sha256": "4b4afde1652302a19979f07a3217ce51ab00da6b5beeffd7a073be3ab27c07f9",
+      "replacements": {
+        "raccordable": "anschließbar"
+      }
+    }
+  },
+  "9c70caaf899d0b67267ffc6377a98858c5ddd274a60ffa20029fc8a75a70777e": {
+    "en": {
+      "expected_sha256": "688351fa8b96825e92c6abef11daca4d8d7551bc60e3d0fd1d03d5dbb7b1bff2",
+      "replacements": {
+        "raccordable": "connectable"
+      }
+    },
+    "de": {
+      "expected_sha256": "a7dace0c31e8c5a138a19ea527d8031f7ab8ecd423f678ddd87e0a771ec72ee6",
+      "replacements": {
+        "raccordable": "anschließbar"
+      }
+    }
+  }
+}

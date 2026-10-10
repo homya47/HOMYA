@@ -1,0 +1,13 @@
+# A complete Laravel project lives here; only public/ may be served by a
+# deliberately configured document root. The bare local folder URL redirects
+# to the compatible PHP runtime; every other path remains inaccessible.
+<IfModule mod_authz_core.c>
+    <RequireAll>
+        Require local
+        Require expr "%{REQUEST_URI} =~ m#^/(?i:homya)/?$#"
+    </RequireAll>
+</IfModule>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^$ http://127.0.0.1:8080/fr [R=302,L]
+</IfModule>

@@ -1,0 +1,1490 @@
+{
+  "Poêle à granulés étanche canalisable": [
+    "Room-sealed ducted pellet stove",
+    "Raumluftunabhängiger kanalisierbarer Pelletofen"
+  ],
+  "Poêle à granulés étanche et canalisable": [
+    "Room-sealed ducted pellet stove",
+    "Raumluftunabhängiger kanalisierbarer Pelletofen"
+  ],
+  "Poêle à granulés canalisable": [
+    "Ducted pellet stove",
+    "Kanalisierbarer Pelletofen"
+  ],
+  "Poêle à granulés étanche": [
+    "Room-sealed pellet stove",
+    "Raumluftunabhängiger Pelletofen"
+  ],
+  "Poêle à granulés hydro": [
+    "Water-bearing pellet stove",
+    "Wasserführender Pelletofen"
+  ],
+  "Poêle à granulés silencieux étanche": [
+    "Quiet room-sealed pellet stove",
+    "Leiser raumluftunabhängiger Pelletofen"
+  ],
+  "Poêle à granulés silencieux": [
+    "Quiet pellet stove",
+    "Leiser Pelletofen"
+  ],
+  "Poêle à granulés": [
+    "Pellet stove",
+    "Pelletofen"
+  ],
+  "Poêle à granules": [
+    "Pellet stove",
+    "Pelletofen"
+  ],
+  "Poêle à bois étanche": [
+    "Room-sealed wood-burning stove",
+    "Raumluftunabhängiger Holzofen"
+  ],
+  "Poêle à bois avec four": [
+    "Wood-burning stove with oven",
+    "Holzofen mit Backfach"
+  ],
+  "Poêle à bois hydraulique": [
+    "Water-bearing wood-burning stove",
+    "Wasserführender Holzofen"
+  ],
+  "Poêle à bois": [
+    "Wood-burning stove",
+    "Holzofen"
+  ],
+  "Poêle de cuisine": [
+    "Cooking stove",
+    "Kochherd"
+  ],
+  "Poêle mixte bois & granulés": [
+    "Combined wood & pellet stove",
+    "Kombiofen für Holz & Pellets"
+  ],
+  "Insert à granulés hydro": [
+    "Water-bearing pellet insert",
+    "Wasserführender Pellet-Kamineinsatz"
+  ],
+  "Insert à granulés": [
+    "Pellet fireplace insert",
+    "Pellet-Kamineinsatz"
+  ],
+  "Foyer insert": [
+    "Fireplace insert",
+    "Kamineinsatz"
+  ],
+  "Cuisinière à bois": [
+    "Wood-burning cooker",
+    "Holzherd"
+  ],
+  "Chaudière à gazéification du bois": [
+    "Wood gasification boiler",
+    "Holzvergaserkessel"
+  ],
+  "Chaudière à gazéification de charbon": [
+    "Coal gasification boiler",
+    "Kohlevergaserkessel"
+  ],
+  "Chaudière à granulés": [
+    "Pellet boiler",
+    "Pelletkessel"
+  ],
+  "Chaudière à granules": [
+    "Pellet boiler",
+    "Pelletkessel"
+  ],
+  "Lave-linge séchant": [
+    "Washer-dryer",
+    "Waschtrockner"
+  ],
+  "Lave-linge": [
+    "Washing machine",
+    "Waschmaschine"
+  ],
+  "Sèche-linge": [
+    "Tumble dryer",
+    "Wäschetrockner"
+  ],
+  "Réfrigérateur congélateur bas": [
+    "Fridge-freezer with bottom freezer",
+    "Kühl-Gefrierkombination mit Gefrierteil unten"
+  ],
+  "Réfrigérateur congélateur haut": [
+    "Fridge-freezer with top freezer",
+    "Kühl-Gefrierkombination mit Gefrierteil oben"
+  ],
+  "Réfrigérateur américain": [
+    "Side-by-side refrigerator",
+    "Side-by-Side-Kühlschrank"
+  ],
+  "Réfrigérateur multi-portes": [
+    "Multi-door refrigerator",
+    "Mehr­türiger Kühlschrank"
+  ],
+  "Réfrigérateur": [
+    "Refrigerator",
+    "Kühlschrank"
+  ],
+  "Congélateur": [
+    "Freezer",
+    "Gefrierschrank"
+  ],
+  "Palette de granulés de bois": [
+    "Pallet of wood pellets",
+    "Palette Holzpellets"
+  ],
+  "Palette de pellets": [
+    "Pallet of pellets",
+    "Palette Pellets"
+  ],
+  "Palette de bois de chauffage": [
+    "Pallet of firewood",
+    "Palette Brennholz"
+  ],
+  "Bois de chauffage": [
+    "Firewood",
+    "Brennholz"
+  ],
+  "Granulés de bois": [
+    "Wood pellets",
+    "Holzpellets"
+  ],
+  "Houille de Forge": [
+    "Forge coal",
+    "Schmiedekohle"
+  ],
+  "Boulets d'anthracite": [
+    "Anthracite briquettes",
+    "Anthrazitbriketts"
+  ],
+  "Tuyau de fumée": [
+    "Flue pipe",
+    "Abgasrohr"
+  ],
+  "Tuyau de poêle": [
+    "Stove pipe",
+    "Ofenrohr"
+  ],
+  "Conduit de fumée": [
+    "Flue pipe",
+    "Abgasrohr"
+  ],
+  "Conduit de cheminée": [
+    "Chimney pipe",
+    "Schornsteinrohr"
+  ],
+  "élément de longueur": [
+    "Length section",
+    "Längenelement"
+  ],
+  "écran thermique": [
+    "Heat shield",
+    "Hitzeschutzblech"
+  ],
+  "échangeur de chaleur": [
+    "Heat exchanger",
+    "Wärmetauscher"
+  ],
+  "Ballon d'eau chaude": [
+    "Hot water tank",
+    "Warmwasserspeicher"
+  ],
+  "Ballon tampon": [
+    "Buffer tank",
+    "Pufferspeicher"
+  ],
+  "Plaque vitrocéramique": [
+    "Ceramic glass hob",
+    "Glaskeramik-Kochfeld"
+  ],
+  "plaque de cuisson": [
+    "Hob",
+    "Kochfeld"
+  ],
+  "double paroi": [
+    "Double wall",
+    "Doppelwandig"
+  ],
+  "simple paroi": [
+    "Single wall",
+    "Einwandig"
+  ],
+  "acier inoxydable": [
+    "Stainless steel",
+    "Edelstahl"
+  ],
+  "Acier café au lait": [
+    "Beige steel",
+    "Beiger Stahl"
+  ],
+  "Pierre ollaire": [
+    "Soapstone",
+    "Speckstein"
+  ],
+  "gris fonte": [
+    "Cast iron grey",
+    "Gussgrau"
+  ],
+  "tirage naturel": [
+    "Natural draught",
+    "Naturzug"
+  ],
+  "sortie arrière": [
+    "Rear outlet",
+    "Hinterer Anschluss"
+  ],
+  "sortie dessus": [
+    "Top outlet",
+    "Oberer Anschluss"
+  ],
+  "sortie concentrique dessus": [
+    "Top concentric outlet",
+    "Oberer konzentrischer Anschluss"
+  ],
+  "sans électricité": [
+    "Without electricity",
+    "Ohne Strom"
+  ],
+  "nettoyage automatique": [
+    "Automatic cleaning",
+    "Automatische Reinigung"
+  ],
+  "creuset autonettoyant": [
+    "Self-cleaning burn pot",
+    "Selbstreinigende Brennschale"
+  ],
+  "compacteur de cendres": [
+    "Ash compactor",
+    "Ascheverdichter"
+  ],
+  "porte en verre": [
+    "Glass door",
+    "Glastür"
+  ],
+  "sacs de": [
+    "Bags of",
+    "Säcke mit"
+  ],
+  "congélateur en bas": [
+    "Bottom freezer",
+    "Gefrierteil unten"
+  ],
+  "congélateur en haut": [
+    "Top freezer",
+    "Gefrierteil oben"
+  ],
+  "chêne": [
+    "Oak",
+    "Eiche"
+  ],
+  "hêtre": [
+    "Beech",
+    "Buche"
+  ],
+  "bûches": [
+    "Logs",
+    "Holzscheite"
+  ],
+  "étanche": [
+    "Room-sealed",
+    "Raumluftunabhängig"
+  ],
+  "canalisable": [
+    "Ducted",
+    "Kanalisierbar"
+  ],
+  "hydraulique": [
+    "Water-bearing",
+    "Wasserführend"
+  ],
+  "bouilleur": [
+    "Water-bearing",
+    "Wasserführend"
+  ],
+  "coude": [
+    "Elbow",
+    "Rohrbogen"
+  ],
+  "fumées": [
+    "Flue gases",
+    "Abgase"
+  ],
+  "fumée": [
+    "Smoke",
+    "Rauch"
+  ],
+  "émaillé": [
+    "Enamelled",
+    "Emailliert"
+  ],
+  "céramique": [
+    "Ceramic",
+    "Keramik"
+  ],
+  "stéatite": [
+    "Soapstone",
+    "Speckstein"
+  ],
+  "pierre": [
+    "Stone",
+    "Stein"
+  ],
+  "ollaire": [
+    "Soapstone",
+    "Speckstein"
+  ],
+  "fonte": [
+    "Cast iron",
+    "Gusseisen"
+  ],
+  "inoxydable": [
+    "Stainless",
+    "Rostfrei"
+  ],
+  "acier": [
+    "Steel",
+    "Stahl"
+  ],
+  "INOX": [
+    "Stainless steel",
+    "Edelstahl"
+  ],
+  "vitrocéramique": [
+    "Ceramic glass",
+    "Glaskeramik"
+  ],
+  "noir": [
+    "Black",
+    "Schwarz"
+  ],
+  "noire": [
+    "Black",
+    "Schwarz"
+  ],
+  "gris": [
+    "Grey",
+    "Grau"
+  ],
+  "blanc": [
+    "White",
+    "Weiß"
+  ],
+  "blanche": [
+    "White",
+    "Weiß"
+  ],
+  "marron": [
+    "Brown",
+    "Braun"
+  ],
+  "crème": [
+    "Cream",
+    "Creme"
+  ],
+  "ivoire": [
+    "Ivory",
+    "Elfenbein"
+  ],
+  "bordeaux": [
+    "Burgundy",
+    "Bordeauxrot"
+  ],
+  "rouge": [
+    "Red",
+    "Rot"
+  ],
+  "noyer": [
+    "Walnut",
+    "Nussbaum"
+  ],
+  "sable": [
+    "Sand",
+    "Sand"
+  ],
+  "tourterelle": [
+    "Dove grey",
+    "Taubengrau"
+  ],
+  "gauche": [
+    "Left",
+    "Links"
+  ],
+  "droite": [
+    "Right",
+    "Rechts"
+  ],
+  "arrière": [
+    "Rear",
+    "Hinten"
+  ],
+  "dessus": [
+    "Top",
+    "Oben"
+  ],
+  "haut": [
+    "Top",
+    "Oben"
+  ],
+  "bas": [
+    "Bottom",
+    "Unten"
+  ],
+  "manuel": [
+    "Manual",
+    "Manuell"
+  ],
+  "murale": [
+    "Wall-mounted",
+    "Wandmontiert"
+  ],
+  "solaires": [
+    "Solar",
+    "Solar"
+  ],
+  "solaire": [
+    "Solar",
+    "Solar"
+  ],
+  "complet": [
+    "Complete",
+    "Komplett"
+  ],
+  "ensemble": [
+    "Set",
+    "Set"
+  ],
+  "pièces": [
+    "Pieces",
+    "Teile"
+  ],
+  "pièce": [
+    "Piece",
+    "Teil"
+  ],
+  "ouverture": [
+    "Opening",
+    "Öffnung"
+  ],
+  "lisse": [
+    "Smooth",
+    "Glatt"
+  ],
+  "nervuré": [
+    "Ribbed",
+    "Gerippt"
+  ],
+  "nettoyage": [
+    "Cleaning",
+    "Reinigung"
+  ],
+  "télescopique": [
+    "Telescopic",
+    "Teleskopisch"
+  ],
+  "raccordement": [
+    "Connection",
+    "Anschluss"
+  ],
+  "raccord": [
+    "Connector",
+    "Verbindungsstück"
+  ],
+  "réduction": [
+    "Reducer",
+    "Reduzierstück"
+  ],
+  "recouvrement": [
+    "Cover",
+    "Abdeckung"
+  ],
+  "rosace": [
+    "Wall rosette",
+    "Wandrosette"
+  ],
+  "collier": [
+    "Clamp",
+    "Schelle"
+  ],
+  "serrage": [
+    "Clamping",
+    "Klemmung"
+  ],
+  "chapeau": [
+    "Cap",
+    "Haube"
+  ],
+  "réservoir": [
+    "Tank",
+    "Behälter"
+  ],
+  "eau": [
+    "Water",
+    "Wasser"
+  ],
+  "chaud": [
+    "Hot",
+    "Heiß"
+  ],
+  "évacuation": [
+    "Exhaust",
+    "Abführung"
+  ],
+  "concentrique": [
+    "Concentric",
+    "Konzentrisch"
+  ],
+  "supérieur": [
+    "Upper",
+    "Oberer"
+  ],
+  "verre": [
+    "Glass",
+    "Glas"
+  ],
+  "palette": [
+    "Pallet",
+    "Palette"
+  ],
+  "four": [
+    "Oven",
+    "Backofen"
+  ],
+  "portes": [
+    "Doors",
+    "Türen"
+  ],
+  "porte": [
+    "Door",
+    "Tür"
+  ],
+  "sacs": [
+    "Bags",
+    "Säcke"
+  ],
+  "avec": [
+    "With",
+    "Mit"
+  ],
+  "sans": [
+    "Without",
+    "Ohne"
+  ],
+  "pour": [
+    "For",
+    "Für"
+  ],
+  "et": [
+    "And",
+    "Und"
+  ],
+  "en": [
+    "In",
+    "In"
+  ],
+  "d'eau": [
+    "Water",
+    "Wasser"
+  ],
+  "des": [
+    "Of",
+    "Von"
+  ],
+  "de": [
+    "Of",
+    "Von"
+  ],
+  "à": [
+    "At",
+    "Bei"
+  ],
+  "Coude de Coude de tuyau de poêle émaillé": [
+    "Enamelled stove pipe elbow",
+    "Emaillierter Ofenrohrbogen"
+  ],
+  "Coude de tuyau de poêle émaillé": [
+    "Enamelled stove pipe elbow",
+    "Emaillierter Ofenrohrbogen"
+  ],
+  "Coude à": [
+    "Elbow at",
+    "Rohrbogen mit"
+  ],
+  "Moteur Direct Drive™ garanti": [
+    "Direct Drive™ motor warranted for",
+    "Direct Drive™ Motor mit Garantie für"
+  ],
+  "ans": [
+    "years",
+    "Jahre"
+  ],
+  "Processeur": [
+    "Processor",
+    "Prozessor"
+  ],
+  "écran": [
+    "Screen",
+    "Bildschirm"
+  ],
+  "platine": [
+    "Platinum",
+    "Platin"
+  ],
+  "thermique": [
+    "Thermal",
+    "Thermisch"
+  ],
+  "tuyaux": [
+    "Pipes",
+    "Rohre"
+  ],
+  "Cheminée": [
+    "Fireplace",
+    "Kamin"
+  ],
+  "Tube de raccordement": [
+    "Connection pipe",
+    "Anschlussrohr"
+  ],
+  "Tube de poêle": [
+    "Stove pipe",
+    "Ofenrohr"
+  ],
+  "Conduit de poêle": [
+    "Stove pipe",
+    "Ofenrohr"
+  ],
+  "Tuyau de cheminée": [
+    "Chimney pipe",
+    "Schornsteinrohr"
+  ],
+  "Pièce de raccordement de poêle": [
+    "Stove connector",
+    "Ofenanschlussstück"
+  ],
+  "à l’intérieur et à l’extérieur": [
+    "Inside and outside",
+    "Innen und außen"
+  ],
+  "à l’intérieur": [
+    "Inside",
+    "Innen"
+  ],
+  "à paroi simple": [
+    "Single-wall",
+    "Einwandig"
+  ],
+  "conduit de rénovation": [
+    "Chimney renovation liner",
+    "Sanierungsschornsteinrohr"
+  ],
+  "différentes longueurs": [
+    "Various lengths",
+    "Verschiedene Längen"
+  ],
+  "Poêle d’atelier": [
+    "Workshop stove",
+    "Werkstattofen"
+  ],
+  "Poêle d'atelier": [
+    "Workshop stove",
+    "Werkstattofen"
+  ],
+  "Poêle d'angle": [
+    "Corner stove",
+    "Eckofen"
+  ],
+  "Poêle à charbon à feu continu": [
+    "Continuous-burning coal stove",
+    "Kohle-Dauerbrandofen"
+  ],
+  "Poêle hybride": [
+    "Hybrid stove",
+    "Hybridofen"
+  ],
+  "Lavante-séchante": [
+    "Washer-dryer",
+    "Waschtrockner"
+  ],
+  "Pompe à chaleur": [
+    "Heat pump",
+    "Wärmepumpe"
+  ],
+  "Moteur Direct Drive™ avec système Centum™ garanti": [
+    "Direct Drive™ motor with Centum™ system warranted for",
+    "Direct Drive™ Motor mit Centum™ System und Garantie für"
+  ],
+  "Moteur": [
+    "Motor",
+    "Motor"
+  ],
+  "système": [
+    "System",
+    "System"
+  ],
+  "garanti": [
+    "Warranted for",
+    "Mit Garantie für"
+  ],
+  "longueurs": [
+    "Lengths",
+    "Längen"
+  ],
+  "longueur": [
+    "Length",
+    "Länge"
+  ],
+  "intérieur": [
+    "Indoor",
+    "Innen"
+  ],
+  "intérieure": [
+    "Indoor",
+    "Innen"
+  ],
+  "extérieur": [
+    "Outdoor",
+    "Außen"
+  ],
+  "extérieure": [
+    "Outdoor",
+    "Außen"
+  ],
+  "raccourcissable": [
+    "Can be shortened",
+    "Kürzbar"
+  ],
+  "émaillée": [
+    "Enamelled",
+    "Emailliert"
+  ],
+  "émaillés": [
+    "Enamelled",
+    "Emailliert"
+  ],
+  "émail": [
+    "Enamel",
+    "Emaille"
+  ],
+  "supérieure": [
+    "Upper",
+    "Obere"
+  ],
+  "naturelle": [
+    "Natural",
+    "Natürlich"
+  ],
+  "naturel": [
+    "Natural",
+    "Natürlich"
+  ],
+  "fenêtre": [
+    "Window",
+    "Fenster"
+  ],
+  "cachemire": [
+    "Cashmere",
+    "Kaschmir"
+  ],
+  "lavande": [
+    "Lavender",
+    "Lavendel"
+  ],
+  "ventouse": [
+    "Balanced flue",
+    "Luft-Abgas-System"
+  ],
+  "bois": [
+    "Wood",
+    "Holz"
+  ],
+  "cheminées": [
+    "Fireplaces",
+    "Kamine"
+  ],
+  "conduits": [
+    "Flue pipes",
+    "Abgasrohre"
+  ],
+  "conduit": [
+    "Pipe",
+    "Rohr"
+  ],
+  "poêles": [
+    "Stoves",
+    "Öfen"
+  ],
+  "poêle": [
+    "Stove",
+    "Ofen"
+  ],
+  "vitre": [
+    "Glass pane",
+    "Glasscheibe"
+  ],
+  "tuyau": [
+    "Pipe",
+    "Rohr"
+  ],
+  "adaptateur": [
+    "Adapter",
+    "Adapter"
+  ],
+  "départ": [
+    "Starter",
+    "Start"
+  ],
+  "romantique": [
+    "Romantic",
+    "Romantisch"
+  ],
+  "du": [
+    "Of",
+    "Von"
+  ],
+  "le": [
+    "The",
+    "Der"
+  ],
+  "un": [
+    "A",
+    "Ein"
+  ],
+  "décor": [
+    "Decor",
+    "Dekor"
+  ],
+  "arrondi": [
+    "Rounded",
+    "Abgerundet"
+  ],
+  "arrondie": [
+    "Rounded",
+    "Abgerundet"
+  ],
+  "encastrable": [
+    "Built-in",
+    "Einbaufähig"
+  ],
+  "ancrage": [
+    "Anchor",
+    "Verankerung"
+  ],
+  "entretien": [
+    "Maintenance",
+    "Wartung"
+  ],
+  "allumage": [
+    "Ignition",
+    "Zündung"
+  ],
+  "chauffage": [
+    "Heating",
+    "Heizung"
+  ],
+  "sortie": [
+    "Outlet",
+    "Anschluss"
+  ],
+  "feu continu": [
+    "Continuous burning",
+    "Dauerbrand"
+  ],
+  "support": [
+    "Bracket",
+    "Halterung"
+  ],
+  "cendrier": [
+    "Ash pan",
+    "Aschekasten"
+  ],
+  "métallique": [
+    "Metal",
+    "Metall"
+  ],
+  "net": [
+    "Net",
+    "Netto"
+  ],
+  "séchant": [
+    "With drying function",
+    "Mit Trockenfunktion"
+  ],
+  "échangeurs": [
+    "Exchangers",
+    "Wärmetauscher"
+  ],
+  "échangeur": [
+    "Exchanger",
+    "Wärmetauscher"
+  ],
+  "combiné": [
+    "Fridge-freezer",
+    "Kühl-Gefrierkombination"
+  ],
+  "l'éthanol": [
+    "Ethanol",
+    "Ethanol"
+  ],
+  "modérateur": [
+    "Regulator",
+    "Regler"
+  ],
+  "charnières": [
+    "Hinges",
+    "Scharniere"
+  ],
+  "traversée": [
+    "Pass-through",
+    "Durchführung"
+  ],
+  "élément": [
+    "Section",
+    "Element"
+  ],
+  "carré": [
+    "Square",
+    "Quadratisch"
+  ],
+  "carrée": [
+    "Square",
+    "Quadratisch"
+  ],
+  "régulation": [
+    "Control",
+    "Regelung"
+  ],
+  "latérales": [
+    "Side",
+    "Seitlich"
+  ],
+  "latérale": [
+    "Side",
+    "Seitlich"
+  ],
+  "latéral": [
+    "Side",
+    "Seitlich"
+  ],
+  "étagère": [
+    "Shelf",
+    "Regal"
+  ],
+  "brassé": [
+    "Fan-assisted",
+    "Umluft"
+  ],
+  "stratifiée": [
+    "Laminated",
+    "Laminat"
+  ],
+  "revêtement": [
+    "Finish",
+    "Verkleidung"
+  ],
+  "revêtue": [
+    "Coated",
+    "Beschichtet"
+  ],
+  "sèche": [
+    "Dry",
+    "Trocken"
+  ],
+  "soudé": [
+    "Welded",
+    "Geschweißt"
+  ],
+  "cuisinière": [
+    "Cooker",
+    "Herd"
+  ],
+  "grès": [
+    "Stoneware",
+    "Steinzeug"
+  ],
+  "métallisé": [
+    "Metallic",
+    "Metallic"
+  ],
+  "foncé": [
+    "Dark",
+    "Dunkel"
+  ],
+  "ventilé": [
+    "Ventilated",
+    "Belüftet"
+  ],
+  "réfrigérateurs": [
+    "Refrigerators",
+    "Kühlschränke"
+  ],
+  "hygiénique": [
+    "Hygienic",
+    "Hygienisch"
+  ],
+  "d'hygiène": [
+    "Hygiene",
+    "Hygiene"
+  ],
+  "té": [
+    "T-piece",
+    "T-Stück"
+  ],
+  "linéaire": [
+    "Linear",
+    "Linear"
+  ],
+  "brûleur": [
+    "Burner",
+    "Brenner"
+  ],
+  "cafetière": [
+    "Coffee machine",
+    "Kaffeemaschine"
+  ],
+  "poignée": [
+    "Handle",
+    "Griff"
+  ],
+  "côtés": [
+    "Sides",
+    "Seiten"
+  ],
+  "tiré": [
+    "Drawn",
+    "Gezogen"
+  ],
+  "déflecteur": [
+    "Baffle",
+    "Umlenkplatte"
+  ],
+  "intégré": [
+    "Integrated",
+    "Integriert"
+  ],
+  "d'aération": [
+    "Ventilation",
+    "Belüftung"
+  ],
+  "étages": [
+    "Levels",
+    "Ebenen"
+  ],
+  "érable": [
+    "Maple",
+    "Ahorn"
+  ],
+  "densifié": [
+    "Densified",
+    "Verdichtet"
+  ],
+  "chromé": [
+    "Chrome-plated",
+    "Verchromt"
+  ],
+  "bûcher": [
+    "Log storage",
+    "Holzlager"
+  ],
+  "bûche": [
+    "Log",
+    "Holzscheit"
+  ],
+  "récupération": [
+    "Recovery",
+    "Rückgewinnung"
+  ],
+  "prolongé": [
+    "Extended",
+    "Verlängert"
+  ],
+  "série": [
+    "Series",
+    "Serie"
+  ],
+  "chaudière": [
+    "Boiler",
+    "Heizkessel"
+  ],
+  "révision": [
+    "Inspection",
+    "Revision"
+  ],
+  "résineux": [
+    "Softwood",
+    "Nadelholz"
+  ],
+  "perlé": [
+    "Pearl",
+    "Perlmutt"
+  ],
+  "fraîche": [
+    "Fresh",
+    "Frisch"
+  ],
+  "andésite": [
+    "Andesite",
+    "Andesit"
+  ],
+  "sérigraphiée": [
+    "Screen-printed",
+    "Siebdruck"
+  ],
+  "façade": [
+    "Front",
+    "Front"
+  ],
+  "stères": [
+    "Stacked cubic metres",
+    "Raummeter"
+  ],
+  "stère": [
+    "Stacked cubic metre",
+    "Raummeter"
+  ],
+  "étiré": [
+    "Drawn",
+    "Gezogen"
+  ],
+  "capacité": [
+    "Capacity",
+    "Kapazität"
+  ],
+  "américain": [
+    "Side-by-side",
+    "Side-by-Side"
+  ],
+  "gazéification": [
+    "Gasification",
+    "Vergasung"
+  ],
+  "combinée": [
+    "Combined",
+    "Kombiniert"
+  ],
+  "laquée": [
+    "Lacquered",
+    "Lackiert"
+  ],
+  "mélange": [
+    "Mix",
+    "Mischung"
+  ],
+  "réducteur": [
+    "Reducer",
+    "Reduzierstück"
+  ],
+  "plâtre": [
+    "Plaster",
+    "Gips"
+  ],
+  "entièrement": [
+    "Fully",
+    "Vollständig"
+  ],
+  "mètre": [
+    "Metre",
+    "Meter"
+  ],
+  "d'étanchéité": [
+    "Sealing",
+    "Dichtung"
+  ],
+  "poudrée": [
+    "Powder-coated",
+    "Pulverbeschichtet"
+  ],
+  "béton": [
+    "Concrete",
+    "Beton"
+  ],
+  "poignées": [
+    "Handles",
+    "Griffe"
+  ],
+  "poncée": [
+    "Sanded",
+    "Geschliffen"
+  ],
+  "télé": [
+    "TV",
+    "TV"
+  ],
+  "compressé": [
+    "Compressed",
+    "Gepresst"
+  ],
+  "durée": [
+    "Duration",
+    "Dauer"
+  ],
+  "spécial": [
+    "Special",
+    "Speziell"
+  ],
+  "réfractaire": [
+    "Refractory",
+    "Feuerfest"
+  ],
+  "supplémentaire": [
+    "Additional",
+    "Zusätzlich"
+  ],
+  "énergie": [
+    "Energy",
+    "Energie"
+  ],
+  "précis": [
+    "Precise",
+    "Präzise"
+  ],
+  "chaudières": [
+    "Boilers",
+    "Heizkessel"
+  ],
+  "prolongée": [
+    "Extended",
+    "Verlängert"
+  ],
+  "réductrice": [
+    "Reducing",
+    "Reduzierend"
+  ],
+  "hématite": [
+    "Hematite",
+    "Hämatit"
+  ],
+  "châtaignier": [
+    "Chestnut",
+    "Kastanie"
+  ],
+  "métal": [
+    "Metal",
+    "Metall"
+  ],
+  "frêne": [
+    "Ash wood",
+    "Esche"
+  ],
+  "charbon": [
+    "Coal",
+    "Kohle"
+  ],
+  "combinés": [
+    "Fridge-freezers",
+    "Kühl-Gefrierkombinationen"
+  ],
+  "hublot": [
+    "Front-loading",
+    "Frontlader"
+  ],
+  "tambour": [
+    "Drum",
+    "Trommel"
+  ],
+  "protection": [
+    "Protection",
+    "Schutz"
+  ],
+  "chaise": [
+    "Chair",
+    "Stuhl"
+  ],
+  "satinée": [
+    "Satin finish",
+    "Satiniert"
+  ],
+  "satiné": [
+    "Satin finish",
+    "Satiniert"
+  ],
+  "plaque": [
+    "Plate",
+    "Platte"
+  ],
+  "par": [
+    "By",
+    "Von"
+  ],
+  "tirage": [
+    "Draught",
+    "Zug"
+  ],
+  "automatique": [
+    "Automatic",
+    "Automatisch"
+  ],
+  "tampon": [
+    "Cap",
+    "Verschluss"
+  ],
+  "extensible": [
+    "Extendable",
+    "Ausziehbar"
+  ],
+  "ressort": [
+    "Spring",
+    "Feder"
+  ],
+  "manchon": [
+    "Sleeve",
+    "Muffe"
+  ],
+  "mamelon": [
+    "Nipple",
+    "Nippel"
+  ],
+  "fixation": [
+    "Mounting",
+    "Befestigung"
+  ],
+  "flamme": [
+    "Flame",
+    "Flamme"
+  ],
+  "vanne": [
+    "Valve",
+    "Ventil"
+  ],
+  "socle": [
+    "Base",
+    "Sockel"
+  ],
+  "tonnes": [
+    "Tonnes",
+    "Tonnen"
+  ],
+  "tonne": [
+    "Tonne",
+    "Tonne"
+  ],
+  "pression": [
+    "Pressure",
+    "Druck"
+  ],
+  "chevilles": [
+    "Wall plugs",
+    "Dübel"
+  ],
+  "rallonge": [
+    "Extension",
+    "Verlängerung"
+  ],
+  "capteur solaire": [
+    "Solar collector",
+    "Solarkollektor"
+  ],
+  "capteurs solaires": [
+    "Solar collectors",
+    "Solarkollektoren"
+  ],
+  "froid": [
+    "Cold",
+    "Kalt"
+  ],
+  "fours": [
+    "Ovens",
+    "Öfen"
+  ],
+  "couvercle": [
+    "Lid",
+    "Deckel"
+  ],
+  "filetage": [
+    "Thread",
+    "Gewinde"
+  ],
+  "clapet": [
+    "Damper",
+    "Klappe"
+  ],
+  "niche": [
+    "Recess",
+    "Nische"
+  ],
+  "degré": [
+    "Degree",
+    "Grad"
+  ],
+  "diamètre": [
+    "Diameter",
+    "Durchmesser"
+  ],
+  "isolant": [
+    "Insulating",
+    "Isolierend"
+  ],
+  "chevrons": [
+    "Rafters",
+    "Sparren"
+  ],
+  "lubrifiant": [
+    "Lubricant",
+    "Schmiermittel"
+  ],
+  "antiretour": [
+    "Non-return",
+    "Rückschlag"
+  ],
+  "condensat": [
+    "Condensate",
+    "Kondensat"
+  ],
+  "serpentins": [
+    "Coils",
+    "Wärmetauscher"
+  ],
+  "serpentin": [
+    "Coil",
+    "Wärmetauscher"
+  ],
+  "brillante": [
+    "Glossy",
+    "Glänzend"
+  ],
+  "haute": [
+    "High",
+    "Hoch"
+  ],
+  "basse": [
+    "Low",
+    "Niedrig"
+  ],
+  "brossé": [
+    "Brushed",
+    "Gebürstet"
+  ],
+  "flexible": [
+    "Flexible",
+    "Flexibel"
+  ],
+  "joint": [
+    "Seal",
+    "Dichtung"
+  ],
+  "noirs": [
+    "Black",
+    "Schwarz"
+  ],
+  "blancs": [
+    "White",
+    "Weiß"
+  ],
+  "calorifuge": [
+    "Insulated",
+    "Wärmegedämmt"
+  ],
+  "Adaptateur de départ poêle": [
+    "Stove starter adapter",
+    "Ofenanschlussadapter"
+  ],
+  "Collier de serrage": [
+    "Pipe clamp",
+    "Rohrschelle"
+  ],
+  "Tube télescopique": [
+    "Telescopic pipe",
+    "Teleskoprohr"
+  ],
+  "Tube": [
+    "Pipe",
+    "Rohr"
+  ]
+}
