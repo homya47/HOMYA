@@ -6,8 +6,7 @@ Ce guide prépare l’instance Hostinger `homya.eu` à partir des sources HOMYA 
 
 - Hébergement : formule Unlimited, région France, 50 Go disque, PHP CLI 8.5.11, Composer 2.9.8, MariaDB 11.8.9, `pdo_mysql` présent.
 - Domaine et racine configurée : `homya.eu`, `~/domains/homya.eu/public_html`.
-- Le dépôt Laravel est installé dans `public_html` ; le `.htaccess` à cette racine doit router le domaine vers `public/` et refuser l’accès aux sources et au stockage privé. L’application publique est servie par `public/index.php`.
-- La base signalée par `php artisan db:show` était vide lors du dernier contrôle. Toujours refaire `php artisan db:show` avant import.
+- La base commerce `u429557141_homya` contient déjà les cinq tables d’archive et le lot validé. Une seconde base `u429557141_catalogue` a été créée pour isoler la lecture catalogue, car l’offre Hostinger partagée limite les comptes par base.
 - Archive catalogue approuvée : 3 709 produits, 65 catégories, 23 878 traductions ; SQL SHA-256 `cb67ffd9c66cfd0b12bbbe0c7fe0acb0a211cf197557c2030a46aed841b1febd`.
 - Profil privé SHA-256 `adb862b6f9b96e602417d2a6d57160dfcd0040ba3115e956b7d638bfc8deca96`.
 - Quantité de départ confirmée par l’utilisateur : 1 000 unités par produit, soit 3 709 000 unités déclarées.
@@ -27,31 +26,29 @@ Créer les dossiers privés avec permissions `0700` et les fichiers sensibles av
 
 Extraire l’archive média dans la racine du projet : elle contient le chemin `public/media/catalogue/...`. Comparer son SHA-256 au manifeste de livraison avant extraction ; contrôler que les images représentatives répondent en HTTP après publication.
 
-## Import du catalogue
+## Base miroir du catalogue
 
-Dans SSH, depuis `public_html`, vérifier que `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://homya.eu`, que les identifiants MariaDB sont valides, et que l’identité du catalogue est un compte distinct du compte d’écriture commerce avec des droits `SELECT` seulement. Ne jamais coller le contenu de `.env` dans une conversation.
+Dans hPanel/phpMyAdmin, importer `catalogue.sql` dans la base dédiée `u429557141_catalogue`. Ne pas modifier ni supprimer `u429557141_homya` : elle contient déjà l’archive importée et reste la base d’écriture commerce. Le dump crée les tables d’archive ainsi qu’une table `migrations`; ne pas lancer les migrations de l’application sur cette base miroir.
+
+Dans hPanel, limiter ensuite l’utilisateur associé à la base miroir aux privilèges `SELECT`. Le `.env` privé doit contenir les identifiants `HOMYA_CATALOGUE_DB_*` de cette base, avec `HOMYA_CATALOGUE_SOURCE=sql`. Garder `DB_*` pour les commandes : la connexion `commerce` reprend ces valeurs si `HOMYA_COMMERCE_DB_*` sont absentes ou vides. Ne jamais coller le contenu de `.env` dans une conversation.
+
+Cette séparation garde les tables de commandes dans la base commerce et isole le catalogue consultatif dans son propre schéma. Laravel vérifie l’identité, la base et la session MariaDB ; les privilèges `SELECT` doivent aussi être contrôlés dans hPanel.
+
+Après déploiement du correctif, depuis SSH et `public_html`, vérifier les deux connexions et l’audit :
 
 ```sh
 cd ~/domains/homya.eu/public_html
 php artisan optimize:clear
-php artisan db:show
+php artisan db:show --database=commerce
+php artisan db:show --database=homya_hosted_catalogue_reader
 php artisan homya:security-audit --json
-php artisan homya:hostinger-catalogue-import
 ```
 
-La dernière commande sans `--apply` ne fait qu’un contrôle à blanc. Continuer uniquement si `db:show` confirme zéro table, l’audit de sécurité réussit, et la commande affiche `HOSTINGER_IMPORT_READY_NO_SQL`. L’import effectif est une opération d’écriture sur la base distante :
-
-```sh
-php artisan homya:hostinger-catalogue-import --apply
-```
-
-Vérifier `HOSTINGER_ARCHIVE_IMPORTED_VERIFIED_NOT_ACTIVATED`, les comptes du lot `48113d706659964b80f1e72839baa55116f52dc192e5d85cd3fcedc2a9fc7809` et ses empreintes. Le nombre `lots` est vérifié pour ce lot approuvé, pas sur l’ensemble de la table qui peut conserver d’autres lots historiques. Si une exécution s’interrompt après avoir commencé, ne supprimer aucune table et ne rejouer aucun SQL. Après déploiement du correctif, `--apply` peut être relancé uniquement pour vérifier un import déjà présent : il réussira sans SQL seulement si les cinq tables attendues, l’état et les empreintes du lot, ainsi que les nombres de lignes du lot correspondent exactement au profil approuvé ; sinon il refusera et l’état devra être examiné.
+Ne pas relancer `homya:hostinger-catalogue-import` : il cible la connexion principale, déjà alimentée. Vérifier les quatre tables miroir, les comptes du lot `48113d706659964b80f1e72839baa55116f52dc192e5d85cd3fcedc2a9fc7809`, puis tester `https://homya.eu/fr/catalogue` après le déploiement.
 
 ## Activation catalogue et initialisation du stock
 
-Après l’import confirmé, créer l’identité de lecture MariaDB distincte, limitée à `SELECT` sur les tables `archive_lots`, `archive_categories`, `archive_products`, et `archive_translations`. Renseigner les deux connexions dans la configuration privée : connexion `mariadb` d’écriture pour les commandes et compte `HOMYA_CATALOGUE_DB_*` en lecture seule pour le catalogue. Puis choisir `HOMYA_CATALOGUE_SOURCE=sql`.
-
-Vérifier que le profil reste privé et que l’application peut lire le catalogue. Appliquer ensuite les migrations commerce avec la connexion dédiée configurée :
+Après l’import miroir confirmé, vérifier que le profil reste privé et que l’application lit le catalogue via le lecteur dédié. Appliquer ensuite les migrations commerce sur la connexion `commerce` uniquement, après vérification de l’absence des tables commerce et d’une sauvegarde :
 
 ```sh
 php artisan migrate --force --path=database/migrations/commerce

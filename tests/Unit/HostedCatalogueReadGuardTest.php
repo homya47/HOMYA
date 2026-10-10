@@ -14,7 +14,8 @@ final class HostedCatalogueReadGuardTest extends TestCase
         return [
             'external host' => ['host', 'db.example.invalid'],
             'wrong port' => ['port', '3307'],
-            'different database' => ['database', 'other'],
+            'unsafe database identifier' => ['database', 'other-db'],
+            'empty database' => ['database', ''],
             'shared writer account' => ['username', 'homya_commerce_writer'],
             'empty reader password' => ['password', ''],
             'wrong collation' => ['collation', 'utf8mb4_unicode_ci'],
@@ -23,7 +24,15 @@ final class HostedCatalogueReadGuardTest extends TestCase
         ];
     }
 
-    public function test_distinct_local_mariadb_read_account_for_same_hosted_database_is_accepted(): void
+    public function test_distinct_local_mariadb_read_account_for_catalogue_mirror_is_accepted(): void
+    {
+        $reader = $this->reader();
+        $reader['database'] = 'homya_catalogue';
+        HostedCatalogueReadGuard::validateTarget($reader, $this->writer());
+        $this->assertTrue(true);
+    }
+
+    public function test_reader_and_writer_can_share_a_database_when_using_distinct_accounts(): void
     {
         HostedCatalogueReadGuard::validateTarget($this->reader(), $this->writer());
         $this->assertTrue(true);
@@ -37,6 +46,15 @@ final class HostedCatalogueReadGuardTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         HostedCatalogueReadGuard::validateTarget($reader, $this->writer());
+    }
+
+    public function test_empty_writer_target_is_rejected(): void
+    {
+        $writer = $this->writer();
+        $writer['database'] = '';
+
+        $this->expectException(RuntimeException::class);
+        HostedCatalogueReadGuard::validateTarget($this->reader(), $writer);
     }
 
     private function reader(): array
