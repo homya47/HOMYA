@@ -1,13 +1,39 @@
-# A complete Laravel project lives here; only public/ may be served by a
-# deliberately configured document root. The bare local folder URL redirects
-# to the compatible PHP runtime; every other path remains inaccessible.
+# Hostinger deploys the Laravel project into public_html. Route only the public
+# hostname into public/; local development keeps the restricted behavior.
+Options -Indexes
+
 <IfModule mod_authz_core.c>
-    <RequireAll>
+    <RequireAny>
         Require local
-        Require expr "%{REQUEST_URI} =~ m#^/(?i:homya)/?$#"
-    </RequireAll>
+        Require expr "%{HTTP_HOST} =~ m#^(?:www\.)?homya\.eu(?::(?:80|443))?$#"
+    </RequireAny>
 </IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Protect the application, private storage, and project files at the web root.
+    RewriteRule "(^|/)\.(?!well-known/acme-challenge/)" - [F,L]
+    RewriteRule "^(?:app|bootstrap|config|database|docs|lang|node_modules|resources|routes|scripts|storage|tests|vendor|output)(?:/|$)" - [F,L,NC]
+    RewriteRule "^(?:artisan|composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit(?:\.mariadb)?\.xml|vite\.config\.[^/]+)$" - [F,L,NC]
+    RewriteRule "\.(?:sql|log|env|ini|bak|backup|orig|sh|py|pl|cgi|phar|phtml)(?:/|$)" - [F,L,NC]
+
+    # Normalize the optional www host and use HTTPS for the production site.
+    RewriteCond %{HTTP_HOST} ^www\.homya\.eu(?::(?:80|443))?$ [NC]
+    RewriteRule ^ https://homya.eu%{REQUEST_URI} [R=301,L,NE]
+    RewriteCond %{HTTP_HOST} ^homya\.eu(?::80)?$ [NC]
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+    RewriteRule ^ https://homya.eu%{REQUEST_URI} [R=301,L,NE]
+
+    # Stop the internal rewrite from adding a second public/ prefix.
+    RewriteRule ^public(?:/|$) - [L]
+
+    # Serve Laravel through its public document root on the canonical host.
+    RewriteCond %{HTTP_HOST} ^homya\.eu(?::443)?$ [NC]
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Preserve the local XAMPP convenience redirect outside production hosts.
+    RewriteCond %{HTTP_HOST} !^(?:www\.)?homya\.eu(?::(?:80|443))?$ [NC]
     RewriteRule ^$ http://127.0.0.1:8080/fr [R=302,L]
 </IfModule>
