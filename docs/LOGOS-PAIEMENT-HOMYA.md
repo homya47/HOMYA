@@ -1,8 +1,8 @@
-# Logos de paiement HOMYA — 08/10/2026
+# Logo de paiement HOMYA — état au 10/10/2026
 
-Demande utilisateur : afficher les logos sous « Carte bancaire ». Choix explicite : Visa, Mastercard et CB. Le bloc conserve « Moyens de paiement prévus » en FR/EN/DE ; aucune acceptation effective ou connexion de paiement n’est déclarée.
+Demande initiale : afficher les logos Visa, Mastercard et CB. Instruction ultérieure de l’utilisateur : supprimer les logos de cartes et n’afficher que le logo du virement instantané. L’instruction la plus récente remplace le choix précédent.
 
-Le composant partagé `resources/views/components/storefront-footer.blade.php` affiche trois fichiers locaux, sans appel externe, script ou lien tiers. Les SVG officiels sont conservés sans modification ; les styles partagés assurent des proportions constantes et le retour à la ligne sur petit écran. Textes alternatifs : Visa, Mastercard, CB — Cartes Bancaires.
+Le composant partagé `resources/views/components/storefront-footer.blade.php` affiche désormais un pictogramme HOMYA original `public/media/payments/instant-transfer.svg`, accompagné d’un libellé traduit en FR/EN/DE. Les anciens logos de réseaux restent archivés dans leurs fichiers locaux mais ne sont plus affichés. Le visuel représente un virement bancaire instantané ; il ne constitue pas une marque bancaire ni une preuve que le RIB HOMYA est configuré ou que le paiement est actif.
 
 ## Sources officielles consultées le 08/10/2026
 
@@ -12,6 +12,6 @@ Le composant partagé `resources/views/components/storefront-footer.blade.php` a
 
 ## Limites et contrôle
 
-Présentation locale des réseaux souhaités uniquement. Le prestataire, les réseaux réellement acceptés et leurs conditions contractuelles restent à confirmer avant l’ouverture des paiements. CB conditionne le téléchargement à un contrat d’acceptation et l’utilisation au respect de sa charte ; l’existence de ce contrat HOMYA n’a pas été fournie et doit être vérifiée avant publication. Cette préparation ne certifie aucun droit ou contrat.
+Le pied de page affiche uniquement le symbole HOMYA de virement instantané. Les instructions bancaires ne sont disponibles qu’après configuration et validation du RIB professionnel dans l’environnement privé. Aucune coordonnée bancaire ni promesse de disponibilité du virement instantané n’est codée dans ce pictogramme.
 
-Contrôles réalisés : build Vite réussi ; test existant du pied de page FR/EN/DE réussi (1 test, 389 assertions). Les preuves d’installation et de recette locale sont conservées dans `output/qa-payment-logos-20261008/`.
+Contrôles initiaux du 08/10/2026 : build Vite et anciens tests Visa/Mastercard/CB. Contrôle courant après remplacement : test ciblé FR/EN/DE (1 test, 404 assertions), test commerce/CSRF (29 tests, 704 assertions), routes de paiement carte absentes, SVG servi en HTTP 200 et rendu du footer local vérifié dans le navigateur. Les preuves de l’installation de ce pictogramme sont dans le répertoire de sauvegarde indiqué par la recette locale XAMPP, aucun logo officiel ancien n’a été supprimé.

@@ -1,6 +1,12 @@
 # HOMYA — panier, commande, paiements et stock
 
-État courant au 10/10/2026 : Stripe retiré à la demande de l’utilisateur. Le formulaire carte est conservé comme aperçu désactivé, en attente de configuration d’un prestataire. Aucune donnée carte recueillie, aucun service carte actif. Le parcours de virement SEPA et les commandes différées restent conservés. Les paragraphes Stripe ci-dessous décrivent des phases historiques, remplacées par cet état courant.
+État courant au 10/10/2026 : à la demande de l’utilisateur, les logos, pages, options checkout et routes publiques de paiement par carte sont supprimés. Le virement bancaire est le seul mode proposé ; paiement instantané selon la banque du client. Le RIB HOMYA doit être configuré avant affichage d’instructions. Jusqu’alors, le mode différé local peut enregistrer les commandes en attente, sans paiement effectué. Les protections de rapprochement des anciennes commandes contenant une tentative historique sont conservées. Les paragraphes historiques ci-dessous décrivent des états antérieurs.
+
+## Virement uniquement et retrait de l’aperçu carte — 10 octobre 2026
+
+Suppression des routes publiques `/{locale}/paiement/carte`, `/{locale}/commande/{id}/carte` et de repli carte-vers-virement ; retrait des liens correspondants du checkout, des pages d’information et de commande. La sélection serveur accepte désormais uniquement `bank_transfer` ou `deferred`. L’administration indique l’état du RIB, et non un moyen carte. Les CGV FR/EN/DE décrivent le virement comme seul mode prévu.
+
+Le pied de page utilise un pictogramme HOMYA créé localement pour le virement instantané, sans logo Visa, Mastercard ou CB. Les anciens SVG de réseaux sont conservés sur disque, mais le composant ne les référence plus. Aucun RIB n’est repris des captures fournies. Les commandes historiques, leurs colonnes Stripe et les gardes empêchant d’afficher un RIB avant rapprochement d’une ancienne tentative carte sont conservées ; aucune migration ni écriture en base n’est effectuée.
 
 ## Retrait du prestataire carte — état vérifié le 10 octobre 2026
 

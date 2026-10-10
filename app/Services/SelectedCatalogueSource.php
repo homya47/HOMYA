@@ -13,7 +13,12 @@ final class SelectedCatalogueSource implements CatalogueSource
     {
         return $this->source ??= match (config('catalogue.source')) {
             'files' => new FileCatalogueSource,
-            'sql' => new SqlCatalogueSource(fn () => app(LocalCatalogueReadGuard::class)->connect(), CatalogueReadProfile::loadApproved()),
+            'sql' => new SqlCatalogueSource(
+                fn () => app()->environment('production')
+                    ? app(HostedCatalogueReadGuard::class)->connect()
+                    : app(LocalCatalogueReadGuard::class)->connect(),
+                CatalogueReadProfile::loadApproved(),
+            ),
             default => throw new RuntimeException('CATALOGUE_SOURCE_INVALID'),
         };
     }

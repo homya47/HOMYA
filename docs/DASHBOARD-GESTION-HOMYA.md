@@ -1,6 +1,6 @@
 # Dashboard HOMYA — extension de gestion, version 1
 
-État actualisé le 10/10/2026 : l’option Stripe et ses champs de configuration ont été retirés à la demande de l’utilisateur. Le formulaire de carte est conservé désactivé en attente de configuration ; le RIB et les coordonnées HOMYA restent configurables. Les références Stripe dans les phases ci-dessous décrivent l’historique de conception et de recette. Voir `docs/PARCOURS-ACHAT-HOMYA.md`, section Retrait du prestataire carte, pour l’état vérifié actuel.
+État actualisé le 10/10/2026 : paiement par virement uniquement. Les pages et routes publiques carte ont été supprimées. Le dashboard indique si le RIB HOMYA est renseigné/activé ; les données Stripe historiques et contrôles des anciennes commandes restent conservés sans exposition au parcours courant. Voir `docs/PARCOURS-ACHAT-HOMYA.md`, section « Virement uniquement et retrait de l’aperçu carte ».
 
 Source : demandes utilisateur du 9 octobre 2026 (gestion des produits/images/descriptions/prix, réception et réponses aux clients, RIB/Stripe/vendeur, Google et Meta, notifications et trafic, commandes/livraisons). Périmètre autorisé : préparation et développement local. Comptes externes tous souhaités, identifiants et secrets encore inconnus ; ne pas les inventer.
 

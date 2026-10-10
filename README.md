@@ -1,10 +1,10 @@
 # HOMYA
 
-Accès local installé dans XAMPP : [ouvrir HOMYA](http://127.0.0.1:8080/fr). Le dossier servi est `/Applications/XAMPP/xamppfiles/htdocs/HOMYA/public`, avec PHP8.5 et catalogue SQL XAMPP. [Démarrage et contrôles réels](docs/ACCES-LOCAL-XAMPP.md). Le dossier de travail original et l'ancienne copie sont conservés. Les commandes locales sans paiement immédiat sont ouvertes ; le formulaire carte reste en attente de configuration ; le RIB reste à renseigner.
+Accès local installé dans XAMPP : [ouvrir HOMYA](http://127.0.0.1:8080/fr). Le dossier servi est `/Applications/XAMPP/xamppfiles/htdocs/HOMYA/public`, avec PHP8.5 et catalogue SQL XAMPP. [Démarrage et contrôles réels](docs/ACCES-LOCAL-XAMPP.md). Le dossier de travail original et l'ancienne copie sont conservés. Le paiement par virement est le seul mode prévu ; les commandes locales peuvent rester en attente tant que le RIB HOMYA n’est pas renseigné.
 
 Démarrage automatique installé le 10/10/2026 : MariaDB XAMPP au démarrage du Mac, puis HOMYA à l'ouverture de la session `akm`. Aucune commande manuelle nécessaire dans le fonctionnement prévu. [Vérifications et désactivation](docs/ACCES-LOCAL-XAMPP.md#démarrage-automatique--installé-le-10102026) ; prochain redémarrage complet du Mac non encore observé.
 
-Projet Laravel 13 de catalogue local FR/EN/DE, en euros, destiné aux marchés France, Belgique et Allemagne. La consultation est disponible : accueil, navigation, recherche, filtres, tri, pagination, fiches, caractéristiques et galeries. Le panier invité, les commandes, le formulaire de carte en attente de configuration et la page de virement avec réservation de 72 heures sont implémentés. L’inventaire local contient 1 000 unités déclarées par produit, partagées entre les options. Les paiements restent désactivés : prestataire carte non choisi, RIB professionnel et prérequis commerciaux à configurer. Le [dashboard administrateur local](http://127.0.0.1:8080/admin) est protégé et permet de consulter commandes, inventaire et retours. Voir [les accès et protections](docs/ADMINISTRATION-HOMYA.md).
+Projet Laravel 13 de catalogue local FR/EN/DE, en euros, destiné aux marchés France, Belgique et Allemagne. La consultation est disponible : accueil, navigation, recherche, filtres, tri, pagination, fiches, caractéristiques et galeries. Le panier invité, les commandes et le parcours de virement avec réservation de 72 heures sont implémentés. L’inventaire local contient 1 000 unités déclarées par produit, partagées entre les options. Aucun logo ni formulaire de carte n’est proposé. Le RIB professionnel et les prérequis commerciaux restent à configurer avant paiement réel. Le [dashboard administrateur local](http://127.0.0.1:8080/admin) est protégé et permet de consulter commandes, inventaire et retours. Voir [les accès et protections](docs/ADMINISTRATION-HOMYA.md).
 
 ## Démarrage sur cette machine
 
@@ -57,7 +57,7 @@ Les traductions sont préparées hors ligne. La parité technique ne garantit pa
 - [Cadrage](docs/CADRAGE-HOMYA.md), [cahier des charges](docs/CAHIER-DES-CHARGES-HOMYA.md), [architecture](docs/ARCHITECTURE-ET-PLAN-HOMYA.md), [UX/UI](docs/UX-UI-HOMYA.md)
 - [Environnement et vérifications locales](docs/ENVIRONNEMENT-LOCAL.md)
 - [Administration locale](docs/ADMINISTRATION-HOMYA.md)
-- [Panier, commandes, formulaire carte, virement et installation du stock](docs/PARCOURS-ACHAT-HOMYA.md)
+- [Panier, commandes, virement uniquement et installation du stock](docs/PARCOURS-ACHAT-HOMYA.md)
 - [SEO, sitemap, données structurées et préparation Merchant Center](docs/SEO-GOOGLE-HOMYA.md)
 - [Sélection produit, messages d’achat et retours gratuits14jours](docs/SELECTION-PRODUIT-HOMYA.md)
 - [Catalogue et pagination](docs/INCREMENT-CATALOGUE-CORRECTIONS.md), [identité publique](docs/INCREMENT-IDENTITE-HOMYA.md), [langues et images](docs/INCREMENT-LANGUES-IMAGES.md)

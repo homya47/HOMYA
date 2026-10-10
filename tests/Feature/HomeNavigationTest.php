@@ -9,6 +9,13 @@ use Tests\TestCase;
 
 class HomeNavigationTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // This fixture checks internal navigation; contact links have their own tests.
+        config(['contact.phone' => null, 'contact.email' => null]);
+    }
+
     public function test_home_navigation_has_real_destinations_in_every_language_without_database(): void
     {
         DB::shouldReceive('connection')->never();
@@ -37,7 +44,7 @@ class HomeNavigationTest extends TestCase
                     $this->assertSame(1, $destination->query('//*[@id="'.$url['fragment'].'"]')->length, 'Missing navigation destination');
                 }
                 if (isset($url['path'])) {
-                    $this->assertMatchesRegularExpression('~^/(fr|en|de)(/catalogue|/promotions|/retours/declaration|/produit/[a-z0-9-]+|/(a-propos|provenance|conseiller|contact|livraison|retractation|paiement|suivi|panier|avis|mentions-legales|cgv|confidentialite|cookies))?$~', $url['path']);
+                    $this->assertMatchesRegularExpression('~^/(fr|en|de)(/catalogue|/promotions|/retours/declaration|/produit/[a-z0-9-]+|/(a-propos|provenance|conseiller|contact|livraison|retractation|paiement|suivi|panier|mentions-legales|cgv|confidentialite|cookies))?$~', $url['path']);
                 }
             }
 

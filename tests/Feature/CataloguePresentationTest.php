@@ -257,14 +257,15 @@ class CataloguePresentationTest extends TestCase
         $this->assertSame($archiveHash, hash_file('sha256', $this->fixture.'/index.json'));
     }
 
-    public function test_missing_content_and_empty_category_do_not_create_section_shortcuts_or_other_category_recommendations(): void
+    public function test_factual_description_fallback_has_a_section_but_empty_category_has_no_other_category_recommendations(): void
     {
         foreach (['fr', 'en', 'de'] as $locale) {
             $response = $this->get('/'.$locale.'/produit/presentation-8')->assertOk()->assertSee(__('catalogue.related_empty', [], $locale));
             $this->assertCount(0, $response->viewData('relatedProducts'));
             $xpath = $this->xpath($response->getContent());
-            $this->assertSame(0, $xpath->query('//nav[@class="product-section-navigation"]|//section[@id="related-products"]//article')->length);
-            $this->assertSame(0, $xpath->query('//*[@id="product-description"]|//*[@id="product-variants"]')->length);
+            $this->assertSame(0, $xpath->query('//section[@id="related-products"]//article|//*[@id="product-variants"]')->length);
+            $this->assertSame(1, $xpath->query('//nav[@class="product-section-navigation"]/a[@href="#product-description"]')->length);
+            $this->assertSame(1, $xpath->query('//*[@id="product-description"]')->length);
         }
     }
 

@@ -43,8 +43,9 @@ class InformationPagesTest extends TestCase
         config(['catalogue.archive_path' => sys_get_temp_dir().'/homya-missing-'.uniqid().'.json']);
         foreach (['fr', 'en', 'de'] as $locale) {
             $this->get('/'.$locale.'/contact')->assertOk()->assertSee('disabled', false)
-                ->assertDontSee(__('pages.pending', [], $locale));
+                ->assertDontSee(__('pages.pending', [], $locale))->assertDontSee('/'.$locale.'/avis', false);
             $this->get('/'.$locale.'/unknown-page')->assertNotFound();
+            $this->get('/'.$locale.'/avis')->assertNotFound();
         }
         $this->get('/es/contact')->assertNotFound();
     }

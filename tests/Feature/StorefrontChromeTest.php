@@ -44,7 +44,7 @@ class StorefrontChromeTest extends TestCase
 
     public function test_service_navigation_has_localized_destinations_and_no_invented_basket_counter(): void
     {
-        config(['contact.email' => 'support@example.test']);
+        config(['contact.email' => 'support@example.test', 'contact.phone' => '+33756894951']);
         foreach (['fr', 'en', 'de'] as $locale) {
             $response = $this->get('/'.$locale.'/contact')->assertOk()
                 ->assertDontSee('chrome.', false)->assertDontSee('damdam', false);
@@ -58,7 +58,7 @@ class StorefrontChromeTest extends TestCase
                 $this->assertNotNull($nav);
                 $this->assertNotEmpty($nav->getAttribute('aria-label'));
                 $links = $xpath->query('.//a', $nav);
-                $this->assertCount(count($pages), $links);
+                $this->assertCount(count($pages) + ($class === 'utility-navigation' ? 1 : 0), $links);
                 foreach ($pages as $index => $page) {
                     $link = $links->item($index);
                     $path = $this->localPath($link->getAttribute('href'), $locale);
@@ -68,6 +68,13 @@ class StorefrontChromeTest extends TestCase
                     $this->get($path)->assertOk();
                 }
             }
+            $phone = $xpath->query('//nav[@class="utility-navigation"]//a[@class="utility-phone"]')->item(0);
+            $this->assertNotNull($phone);
+            $this->assertSame('https://wa.me/33756894951', $phone->getAttribute('href'));
+            $this->assertSame('_blank', $phone->getAttribute('target'));
+            $this->assertSame('noopener noreferrer', $phone->getAttribute('rel'));
+            $this->assertSame('no-referrer', $phone->getAttribute('referrerpolicy'));
+            $this->assertSame(__('contact.chat_label', [], $locale).': +33756894951', $phone->getAttribute('aria-label'));
             $services = $xpath->query('//*[@id="primary-navigation"]//li[@class="navigation-service"]/a');
             $this->assertCount(2, $services);
             foreach (['suivi', 'panier'] as $index => $page) {
@@ -113,8 +120,9 @@ class StorefrontChromeTest extends TestCase
                 }
             }
             $this->assertSame(1, $xpath->query('//footer//a[contains(@href,"/'.$locale.'/cookies")]')->length);
-            $this->assertSame(2, $xpath->query('//ul[@class="footer-payment-methods"]/li')->length);
-            $this->assertSame(__('chrome.payment_planned', [], $locale), $xpath->query('//*[@class="footer-payment-label"]')->item(0)->textContent);
+            $this->assertSame(1, $xpath->query('//footer//img[contains(@src,"instant-transfer.svg")]')->length);
+            $this->assertSame(__('chrome.instant_transfer', [], $locale), trim($xpath->query('//*[contains(@class,"footer-transfer-logo")]')->item(0)->textContent));
+            $this->assertSame(0, $xpath->query('//footer//img[contains(@src,"visa") or contains(@src,"mastercard") or contains(@src,"cartes-bancaires")]')->length);
             $this->assertSame(0, $xpath->query('//footer//form | //footer//input')->length);
         }
     }
