@@ -6,6 +6,7 @@ Ce guide prépare l’instance Hostinger `homya.eu` à partir des sources HOMYA 
 
 - Hébergement : formule Unlimited, région France, 50 Go disque, PHP CLI 8.5.11, Composer 2.9.8, MariaDB 11.8.9, `pdo_mysql` présent.
 - Domaine et racine configurée : `homya.eu`, `~/domains/homya.eu/public_html`.
+- Le dépôt Laravel est installé dans `public_html` ; le `.htaccess` à cette racine doit router le domaine vers `public/` et refuser l’accès aux sources et au stockage privé. L’application publique est servie par `public/index.php`.
 - La base signalée par `php artisan db:show` était vide lors du dernier contrôle. Toujours refaire `php artisan db:show` avant import.
 - Archive catalogue approuvée : 3 709 produits, 65 catégories, 23 878 traductions ; SQL SHA-256 `cb67ffd9c66cfd0b12bbbe0c7fe0acb0a211cf197557c2030a46aed841b1febd`.
 - Profil privé SHA-256 `adb862b6f9b96e602417d2a6d57160dfcd0040ba3115e956b7d638bfc8deca96`.
