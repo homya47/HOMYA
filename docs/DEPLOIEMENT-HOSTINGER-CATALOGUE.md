@@ -44,7 +44,7 @@ La dernière commande sans `--apply` ne fait qu’un contrôle à blanc. Continu
 php artisan homya:hostinger-catalogue-import --apply
 ```
 
-Vérifier `HOSTINGER_ARCHIVE_IMPORTED_VERIFIED_NOT_ACTIVATED`, les comptes de tables et le lot `48113d706659964b80f1e72839baa55116f52dc192e5d85cd3fcedc2a9fc7809`. La commande refuse une base non vide. Si elle échoue après avoir commencé, ne pas la relancer et ne supprimer aucune table : inspecter l’état partiel et sauvegarder d’abord.
+Vérifier `HOSTINGER_ARCHIVE_IMPORTED_VERIFIED_NOT_ACTIVATED`, les comptes du lot `48113d706659964b80f1e72839baa55116f52dc192e5d85cd3fcedc2a9fc7809` et ses empreintes. Le nombre `lots` est vérifié pour ce lot approuvé, pas sur l’ensemble de la table qui peut conserver d’autres lots historiques. Si une exécution s’interrompt après avoir commencé, ne supprimer aucune table et ne rejouer aucun SQL. Après déploiement du correctif, `--apply` peut être relancé uniquement pour vérifier un import déjà présent : il réussira sans SQL seulement si les cinq tables attendues, l’état et les empreintes du lot, ainsi que les nombres de lignes du lot correspondent exactement au profil approuvé ; sinon il refusera et l’état devra être examiné.
 
 ## Activation catalogue et initialisation du stock
 
