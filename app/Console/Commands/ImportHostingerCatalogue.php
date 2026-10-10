@@ -36,7 +36,23 @@ final class ImportHostingerCatalogue extends Command
             if (! hash_equals(self::DUMP_SHA256, hash_file('sha256', $path))) {
                 throw new RuntimeException('HOSTED_DUMP_DIGEST_INVALID');
             }
-            $this->requireEmptyTarget($connection);
+            $existingTables = $this->tableNames($connection);
+            if ($existingTables !== []) {
+                if (! $this->option('apply')) {
+                    throw new RuntimeException('HOSTED_DATABASE_MUST_BE_EMPTY');
+                }
+
+                // MariaDB DDL is not transactional. A previous run may have completed
+                // all statements and failed only in final verification. Verify the
+                // approved lot and its scoped row counts before reporting success;
+                // never replay SQL or repair/delete existing rows automatically.
+                $this->verifyImport($connection, $profile->data['counts']);
+                $this->line(json_encode(['status' => 'HOSTINGER_ARCHIVE_IMPORTED_VERIFIED_NOT_ACTIVATED',
+                    'lot_key' => CatalogueReadProfile::LOT, 'counts' => $profile->data['counts'],
+                    'sql_executed' => false, 'already_imported' => true, 'catalogue_activated' => false], JSON_THROW_ON_ERROR));
+
+                return self::SUCCESS;
+            }
             $statements = self::splitSqlStatements(file_get_contents($path));
             self::requireApprovedStatements($statements);
             if (! $this->option('apply')) {
@@ -52,7 +68,7 @@ final class ImportHostingerCatalogue extends Command
             $this->verifyImport($connection, $profile->data['counts']);
             $this->line(json_encode(['status' => 'HOSTINGER_ARCHIVE_IMPORTED_VERIFIED_NOT_ACTIVATED',
                 'lot_key' => CatalogueReadProfile::LOT, 'counts' => $profile->data['counts'],
-                'sql_executed' => true, 'catalogue_activated' => false], JSON_THROW_ON_ERROR));
+                'sql_executed' => true, 'already_imported' => false, 'catalogue_activated' => false], JSON_THROW_ON_ERROR));
 
             return self::SUCCESS;
         } catch (Throwable) {
@@ -87,12 +103,11 @@ final class ImportHostingerCatalogue extends Command
         }
     }
 
-    private function requireEmptyTarget(Connection $connection): void
+    private function tableNames(Connection $connection): array
     {
         $tables = $connection->select('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? ORDER BY TABLE_NAME', [$connection->getDatabaseName()]);
-        if ($tables !== []) {
-            throw new RuntimeException('HOSTED_DATABASE_MUST_BE_EMPTY');
-        }
+
+        return array_map(static fn (object $table): string => (string) $table->TABLE_NAME, $tables);
     }
 
     public static function requireApprovedStatements(array $statements): void
@@ -202,8 +217,7 @@ final class ImportHostingerCatalogue extends Command
 
     private function verifyImport(Connection $connection, array $counts): void
     {
-        $tables = $connection->select('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? ORDER BY TABLE_NAME', [$connection->getDatabaseName()]);
-        $actualTables = array_column($tables, 'TABLE_NAME');
+        $actualTables = $this->tableNames($connection);
         $expectedTables = self::TABLES;
         sort($actualTables);
         sort($expectedTables);
@@ -217,7 +231,7 @@ final class ImportHostingerCatalogue extends Command
             || hash('sha256', $lot->verification_document) !== $approvedProfile['proof_sha256']) {
             throw new RuntimeException('HOSTED_IMPORT_LOT_DIVERGENT');
         }
-        $actual = ['lots' => $connection->table('archive_lots')->count(),
+        $actual = ['lots' => $connection->table('archive_lots')->where('lot_key', CatalogueReadProfile::LOT)->count(),
             'categories' => $connection->table('archive_categories')->where('lot_key', CatalogueReadProfile::LOT)->count(),
             'products' => $connection->table('archive_products')->where('lot_key', CatalogueReadProfile::LOT)->count(),
             'translations' => $connection->table('archive_translations')->where('lot_key', CatalogueReadProfile::LOT)->count()];
