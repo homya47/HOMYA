@@ -39,7 +39,7 @@ for locale in ('fr', 'en', 'de'):
     check('/' + locale + '/commande/adresses', 419, method='POST', body=b'')
 check('/fr/commande/00000000-0000-4000-8000-000000000001/virement', 419, method='POST', body=b'')
 check('/fr/panier', 419, method='POST', body=b'slug=chauffage-363102-poeles-a-bois&quantity=1')
-check('/paiement/stripe/webhook', 503, method='POST', body=b'{}', private=True)
+check('/paiement/stripe/webhook', 404)
 for path in ('/.env', '/vendor/autoload.php', '/storage/app/private/commerce/initial-inventory-v2.json'):
     check(path, (403, 404), method='HEAD')
 result = {'result': 'passed', 'checks': checks, 'checkout_enabled': args.deferred_open, 'real_charge': False}

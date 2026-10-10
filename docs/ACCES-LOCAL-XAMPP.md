@@ -13,7 +13,7 @@ Le projet de travail reste `/Users/akm/Documents/ChatGPT/HOMYA`. L'utilisateur a
 5. Vérifier syntaxe Apache/FPM avant lancement ; processus locaux dédiés uniquement. Vérifier accueil/catalogue/fiches FR/EN/DE, erreurs, filtres, pagination, langues, images, responsive et accès refusés aux chemins privés. `/up` ne suffit pas à prouver la base.
 6. Consigner URL réelle, PID et preuves. Conserver le retour source-only autorisé si la recette SQL échoue sans autre divergence. Une copie de configuration n'est pas une sauvegarde SQL.
 
-L'URL prévue est `http://127.0.0.1:8080/fr` ; elle n'est confirmée disponible qu'après les contrôles. Les processus de développement ne constituent pas un hébergement de production. Après redémarrage de l'ordinateur, utiliser la commande de démarrage documentée ; aucun démarrage automatique système n'est installé.
+L'URL prévue est `http://127.0.0.1:8080/fr` ; elle n'est confirmée disponible qu'après les contrôles. Les processus de développement ne constituent pas un hébergement de production. Au 08/10/2026, le lancement était manuel ; le démarrage automatique installé le 10/10/2026 est décrit ci-dessous.
 
 Le périmètre métier reste un catalogue consultatif. Identité du vendeur, validation actuelle des prix/TVA/stock, livraison/retours, paiement et administration commerciale restent ouverts ; l'utilisateur les fournira ultérieurement. Hostinger choisi, formule et domaine non décidés dans cette phase locale. Aucun compte distant, tag ou transaction réelle créé.
 
@@ -23,10 +23,12 @@ Le périmètre métier reste un catalogue consultatif. Identité du vendeur, val
 - Copie initiale intégrale :74 139 fichiers/9 613 872 228octets, contenus SHA256, types, modes, uid/gid et liens symboliques comparés à la source, source recontrôlée. La copie macOS a hérité du groupeadmin80 pour les fichiers : arrêt avant remplacement, puis groupe source20 rétabli sur la nouvelle copie uniquement et contrôles complets réussis. Racine incluse ; attributs étendus et topologie globale des liens physiques non certifiés. Métadonnées/ACL des accès privés et du profil contrôlées séparément.
 - Ancien dossier conservé, même inode/device, sous `/Applications/XAMPP/xamppfiles/homya-local/20261008T180754Z-1afc52ac-d21f-4530-a1ac-83890af9b236/HOMYA-previous`, parent0700. Aucun fichier supprimé. Le dossier de travail original est préservé ; ce n'est pas une synchronisation automatique.
 - Apache et FPM dédiés restent démarrés pour l'usage local. Le premier lancement a rencontré une lecture prématurée du PID Apache ; les deux services avaient réussi et ont été contrôlés ensuite sans redémarrage. Le helper final attend la présence du PID et vérifie son processus, sans arrêter un service tiers.
-- Après redémarrage de l'ordinateur, lancer `/usr/bin/python3 /Applications/XAMPP/xamppfiles/htdocs/HOMYA/scripts/start_homya_local.py --start`. Sans `--start`, cette commande affiche seulement l'état. Le pool FPM/Apache HOMYA est distinct des boutons de contrôle des autres services XAMPP. MariaDB XAMPP doit être disponible.
+- Depuis le 10/10/2026, le lancement est automatique à l'ouverture de la session `akm`. En dépannage, lancer `/usr/bin/python3 /Applications/XAMPP/xamppfiles/htdocs/HOMYA/scripts/start_homya_local.py --start`. Sans `--start`, cette commande affiche seulement l'état. Le pool FPM/Apache HOMYA est distinct des boutons de contrôle des autres services XAMPP.
 - Le dossier complet refuse les fichiers privés ; l'entrée locale habituelle `/HOMYA/` redirige vers le runtime compatible8080. Elle nécessite que l'Apache XAMPP habituel sur80 fonctionne ; l'URL8080 reste l'accès direct à privilégier.
 
 ## Corrections et contrôles
+
+État du 10/10/2026 — paiement : le footer affiche le pictogramme HOMYA original du virement instantané, sans Visa, Mastercard ni CB. L’aperçu, les options et les routes publiques de paiement par carte ont été retirés ; le paiement par virement reste le seul mode prévu. Tant que le RIB n’est pas renseigné, les commandes locales restent en attente et aucune instruction bancaire n’est affichée. Installation ciblée de 22 fichiers avec sauvegarde privée sous `homya-transfer-only-3_gozi7n`, `.env` préservé, aucune base ni service modifié. Pictogramme vérifié en HTTP 200 (`image/svg+xml`) et footer relu dans le navigateur. Suite finale ciblée : 30 tests / 1 108 assertions réussis. Aucune transaction réelle réalisée.
 
 Galerie60×60sans débordement, formulaire conservé en erreur422 et champs invalides reliés au message, filtres actifs retirables, contexte recherche/tri/page conservé entre fiche/langue/retour ; en-têtesnosniff/SAMEORIGIN/referrer-policy sur200/302/404/422/503, signal fixe de panne sans exception/secret. Quatre chaînes sources EN/DE corrigées après validation du dictionnaire, sans modifier l'archive ; aucune qualité linguistique globale certifiée.
 
@@ -44,3 +46,27 @@ Preuves runtime privées sous `/Applications/XAMPP/xamppfiles/homya-local/202610
 | [Apachemod_proxy_fcgi](https://httpd.apache.org/docs/2.4/mod/mod_proxy_fcgi.html) | SetHandler permet de transmettre les scriptsPHP à FastCGI ; FPM doit être lancé séparément. | ApacheXAMPP et FPM8.5 dédiés, proxy ouvert désactivé et écoute loopback. |
 | [PHPFPMconfiguration](https://www.php.net/manual/en/install.fpm.configuration.php) | Pool, écoute, utilisateurs et restrictions d'extensions configurables. | Propriétaire réel des fichiers, clients loopback, seules extensionsPHP ; preuves sur ce poste. |
 | [ApacheFriendsFAQmacOS](https://www.apachefriends.org/faq_osx.html) | XAMPP destiné au développement ; accès externe phpMyAdmin déconseillé. | Aucun phpMyAdmin ouvert à distance ; production à préparer séparément. |
+
+## Démarrage automatique — installé le 10/10/2026
+
+Demande explicite de l'utilisateur : démarrer HOMYA automatiquement à l'allumage du Mac pour éviter la commande manuelle. Mise en œuvre avec `launchd`, selon les [instructions Apple](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html) et les manuels `launchd.plist` / `launchctl` du Mac. La partie système a été authentifiée dans la fenêtre administrateur macOS.
+
+- `/Library/LaunchDaemons/local.homya.xampp-mariadb.plist` : au démarrage du Mac, lance uniquement `xampp startmysql` avec la configuration XAMPP existante sur 3307. Un MariaDB déjà actif est conservé. MySQL Homebrew reste distinct sur 3306.
+- `/Users/akm/Library/LaunchAgents/local.homya.autostart.plist` : à l'ouverture de la session graphique `akm`, lance le script installé avec `--start --wait-ready`. Apache HOMYA sur 8080 et PHP-FPM sur 19085 restent limités à la boucle locale. Le navigateur n'est pas ouvert automatiquement.
+- Le lanceur attend jusqu'à 90 secondes le socket MariaDB et un HTTP 200 du catalogue ; en cas d'échec, macOS retente avec une temporisation de 60 secondes. Après réussite, le lanceur termine ; les serveurs continuent à fonctionner. L'état `not running` de la tâche avec `last exit code = 0` est donc normal. La récupération permanente de toute panne ultérieure n'est pas implémentée.
+- Un PID ancien réutilisé par un programme après redémarrage est ignoré ; aucun signal ne lui est envoyé. Le lancement est refusé si le port est occupé. Aucun service tiers n'est arrêté, aucun service public supplémentaire n'est activé.
+
+Journaux privés : `/Users/akm/Library/Logs/HOMYA/startup.log` et `/var/log/homya-xampp-mariadb.log` (ce dernier réservé à l'administrateur), permissions 0600. Les fichiers de tâche sont 0644, détenus respectivement par `akm:staff` et `root:wheel`. Script antérieur sauvegardé sous `/Users/akm/Library/Logs/HOMYA/installation-20261010T110638Z/start_homya_local.before.py` ; copie installée et source comparées.
+
+Vérifié : 17 tests Python réussis (12 concernant les lanceurs/configurations locales et 5 l'installation), validation des deux plists, compilation AppleScript hors sandbox, chargement effectif des deux tâches, chacune exécutée une fois avec code 0. Assistance et catalogue HTTP 200. PID MariaDB XAMPP 3068, MySQL Homebrew 1242, FPM 3995 et Apache HOMYA 3999 conservés. Aucun redémarrage du Mac, arrêt de service, migration, import ou changement `.env` effectué. Le premier installateur administrateur était bloqué par la protection macOS du dossier Documents ; une copie temporaire identique vérifiée a permis l'installation, sans modifier les autorisations de confidentialité.
+
+Le prochain démarrage complet du Mac reste à observer : l'exécution via `launchd` a été testée dans la session courante, pas un cycle matériel arrêt/allumage. MariaDB démarre avant connexion ; la partie web démarre après ouverture de session, pas à l'écran de connexion.
+
+Pour désactiver les futurs lancements, sans supprimer les fichiers ni arrêter les serveurs déjà lancés :
+
+```bash
+launchctl disable gui/501/local.homya.autostart
+sudo launchctl disable system/local.homya.xampp-mariadb
+```
+
+La réactivation utilise `launchctl enable` avec les mêmes identifiants. Un lancement manuel ponctuel se fait avec `launchctl kickstart gui/501/local.homya.autostart` ; ne pas utiliser `-k` pour arrêter une tâche active. Désactiver ces tâches ne change pas les paramètres XAMPP ou les données de la boutique.

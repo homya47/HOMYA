@@ -64,61 +64,40 @@ class CommerceTest extends TestCase
         $this->bankConfiguration();
     }
 
-    public function test_card_preview_is_localized_disabled_and_collects_no_card_data(): void
+    public function test_card_preview_routes_are_removed_in_all_languages(): void
     {
         DB::shouldReceive('connection')->never();
         foreach (['fr', 'en', 'de'] as $locale) {
-            $response = $this->get('/'.$locale.'/paiement/carte')->assertOk()
-                ->assertDontSee(__('commerce.card_form.unconfigured', [], $locale))
-                ->assertSee(__('commerce.card_form.intro', [], $locale))
-                ->assertDontSee('data-card-payment', false)
-                ->assertHeader('Cache-Control', 'no-store, private');
-            $document = new \DOMDocument;
-            @$document->loadHTML('<?xml encoding="UTF-8">'.$response->getContent());
-            $xpath = new \DOMXPath($document);
-            $this->assertSame(9, $xpath->query('//fieldset[@disabled]//input[@disabled and not(@name)]')->length);
-            $this->assertSame(0, $xpath->query('//fieldset//input[@name]')->length);
+            $this->get('/'.$locale.'/paiement/carte')->assertNotFound();
         }
     }
 
-    public function test_card_provider_is_removed_and_preview_cannot_accept_or_submit_card_data(): void
+    public function test_card_order_route_is_removed_and_checkout_has_no_card_option(): void
     {
         $orders = $this->database();
         $this->enableDeferred();
         $this->post('/fr/commande', $this->checkout(['payment_method' => 'deferred']));
         $order = $orders->connection()->table('commerce_orders')->first();
         $url = '/fr/commande/'.$order->id.'/carte';
-        $this->get($url)->assertOk()->assertDontSee(__('commerce.card_form.unconfigured'))->assertSee(__('commerce.card_form.intro'))->assertDontSee('Stripe')->assertDontSee('data-card-payment', false);
+        $this->get($url)->assertNotFound();
+        $checkout = $this->get('/fr/commande')->assertOk()->assertDontSee('Visa')->assertDontSee('Mastercard')->assertDontSee('Carte bancaire');
+        $this->assertStringNotContainsString('payment_method" value="card', $checkout->getContent());
         $this->assertFalse(app(CheckoutReadiness::class)->cardReady());
         $this->assertFalse(Route::has('stripe.webhook'));
         $this->assertFalse(Route::has('order.card-session'));
         $this->post('/paiement/stripe/webhook')->assertNotFound();
-        $this->post($url.'/session', ['card_number' => 'fixture-only'])->assertNotFound();
         $this->withSession(['commerce.owner' => 'outsider'])->get($url)->assertNotFound();
         $this->assertSame(0, $orders->connection()->table('commerce_payment_events')->count());
     }
 
-    public function test_card_fallback_reuses_owned_order_with_sepa_message_and_rejects_card_data(): void
+    public function test_checkout_success_notice_has_spacing_without_artificial_focus_ring(): void
     {
-        $orders = $this->database();
         $this->enableDeferred();
-        $this->post('/fr/commande', $this->checkout(['payment_method' => 'deferred']));
-        $order = $orders->connection()->table('commerce_orders')->first();
-        $url = '/fr/commande/'.$order->id.'/carte/virement';
-        $this->postJson($url)->assertServiceUnavailable();
-        $this->enable();
-        $this->postJson($url, ['card_number' => 'fixture-only'])->assertUnprocessable();
-        $this->postJson($url)->assertOk()->assertJsonPath('url', 'http://127.0.0.1:8000/fr/commande/'.$order->id.'/virement');
-        $this->postJson($url)->assertOk();
-        $updated = $orders->owned($order->id, $order->owner_hash);
-        $this->assertSame('pending_bank_transfer', $updated->status);
-        $this->assertSame($order->created_at, $updated->created_at);
-        $this->assertSame('card_unavailable', app(BankTransfer::class)->snapshot($updated)['source']);
-        $this->assertSame(1, $orders->connection()->table('commerce_orders')->count());
-        $this->assertSame(2, (int) $orders->connection()->table('commerce_inventory')->sum('reserved'));
-        $this->get('/fr/commande/'.$order->id.'/virement')->assertSee(__('commerce.card_form.fallback_notice'))->assertSee('DE36000000000000000000');
-        $this->get('/fr/commande/'.$order->id.'/virement')->assertSee(__('commerce.card_form.fallback_notice'));
-        $this->withSession(['commerce.owner' => 'outsider'])->postJson($url)->assertNotFound();
+        $this->post('/fr/panier', ['slug' => 'test-unit', 'quantity' => 1])->assertRedirect();
+        $this->withSession(['commerce_message' => 'Article ajouté au panier.'])
+            ->get('/fr/commande')->assertOk()->assertSee('class="commerce-success" role="status"', false)
+            ->assertDontSee('class="commerce-success" role="status" tabindex="-1"', false)
+            ->assertSee('class="checkout-intro"', false);
     }
 
     public function test_legacy_card_attempt_never_exposes_rib_or_silently_releases_stock(): void
@@ -131,7 +110,6 @@ class CommerceTest extends TestCase
         $customer['card_attempted'] = true;
         $orders->connection()->table('commerce_orders')->where('id', $order->id)->update(['status' => 'pending_payment', 'stripe_session_id' => 'legacy-fixture-only', 'customer_encrypted' => Crypt::encryptString(json_encode($customer))]);
         $this->enable();
-        $this->postJson('/fr/commande/'.$order->id.'/carte/virement')->assertOk();
         $this->get('/fr/commande/'.$order->id.'/virement')->assertDontSee('DE36000000000000000000')->assertDontSee(__('commerce.card_form.fallback_notice'))->assertSee(__('commerce.bank_verification'));
         $this->assertSame('pending_payment', $orders->owned($order->id, $order->owner_hash)->status);
         $this->assertSame(2, (int) $orders->connection()->table('commerce_inventory')->sum('reserved'));
@@ -156,7 +134,7 @@ class CommerceTest extends TestCase
         $this->assertSame(0, (int) $orders->connection()->table('commerce_inventory')->sum('reserved'));
         $this->get('/fr/commande/'.$order->id)->assertSee(__('commerce.status.paid'));
         $this->get('/fr/panier')->assertSee(__('commerce.empty'));
-        $this->postJson('/fr/commande/'.$order->id.'/carte/virement')->assertJsonPath('url', 'http://127.0.0.1:8000/fr/commande/'.$order->id);
+        $this->assertSame(404, $this->postJson('/fr/commande/'.$order->id.'/carte/virement')->getStatusCode());
     }
 
     private function checkout(array $extra = [], string $locale = 'fr'): array
@@ -358,6 +336,34 @@ class CommerceTest extends TestCase
         $this->assertSame(0, $orders->connection()->table('commerce_orders')->count());
     }
 
+    public function test_changed_quote_refreshes_checkout_and_can_be_resubmitted_after_review(): void
+    {
+        $orders = $this->database();
+        $this->enable();
+        $stale = $this->checkout();
+        $this->products['test-unit']['price_cents'] = 13000;
+
+        $this->from('/fr/commande')->post('/fr/commande', $stale)->assertRedirect('/fr/commande')
+            ->assertSessionHasErrors('cart');
+        $refreshed = $this->get('/fr/commande')->assertOk()
+            ->assertSee('260,00 €');
+        preg_match('/name="checkout_key" value="([^"]+)"/', $refreshed->getContent(), $key);
+        preg_match('/name="quote_hash" value="([^"]+)"/', $refreshed->getContent(), $quote);
+        $this->assertNotSame($stale['quote_hash'], $quote[1]);
+        $this->assertSame($quote[1], session('commerce.quote_hash'));
+        $this->assertSame($key[1], session('commerce.checkout_key'));
+        $currentQuote = app(Cart::class)->quote($this->app['session.store']);
+        $this->assertSame($quote[1], hash('sha256', json_encode(array_map(
+            fn ($line) => [$line['key'], $line['quantity'], $line['line_cents']], $currentQuote['lines']), JSON_THROW_ON_ERROR)));
+
+        $orders->connection()->table('commerce_inventory')->where('slug', 'test-unit')->update(['approved_price_cents' => 13000]);
+        $this->post('/fr/commande', array_replace($stale, ['checkout_key' => $key[1], 'quote_hash' => $quote[1]]))
+            ->assertRedirect();
+        $order = $orders->connection()->table('commerce_orders')->first();
+        $this->assertSame(26000, (int) $order->total_cents);
+        $this->assertSame('pending_bank_transfer', $order->status);
+    }
+
     public function test_stock_reference_or_approved_price_mismatch_blocks_payment_and_rolls_back(): void
     {
         $orders = $this->database();
@@ -365,7 +371,8 @@ class CommerceTest extends TestCase
         $data = $this->checkout();
         foreach ([['quantity' => 1], ['quantity' => 1000, 'reference' => 'WRONG-REF'], ['reference' => 'TEST-UNIT', 'approved_price_cents' => 1]] as $changes) {
             $orders->connection()->table('commerce_inventory')->where('slug', 'test-unit')->update($changes);
-            $this->postJson('/fr/commande', $data)->assertUnprocessable();
+            $this->postJson('/fr/commande', $data)->assertUnprocessable()
+                ->assertJsonPath('errors.cart.0', __('commerce.inventory_changed'));
             $this->assertSame(0, $orders->connection()->table('commerce_orders')->count());
         }
     }
@@ -428,6 +435,35 @@ class CommerceTest extends TestCase
             $this->flushSession();
             $orders = $this->database();
         }
+    }
+
+    public function test_deferred_order_can_be_validated_into_bank_transfer_when_rib_becomes_ready(): void
+    {
+        $orders = $this->database();
+        $this->enableDeferred();
+        $this->post('/fr/commande', $this->checkout(['payment_method' => 'deferred']))->assertRedirect();
+        $order = $orders->connection()->table('commerce_orders')->first();
+        $url = '/fr/commande/'.$order->id;
+
+        $this->get($url)->assertOk()
+            ->assertSee(__('commerce.deferred_confirmation_notice'))
+            ->assertDontSee(__('commerce.deferred_notice'))
+            ->assertDontSee(__('commerce.validate_order'));
+
+        $this->enable();
+        $this->get($url)->assertOk()->assertSee(__('commerce.validate_order'));
+        $document = new \DOMDocument;
+        @$document->loadHTML('<?xml encoding="UTF-8"'.$this->get($url)->getContent());
+        $xpath = new \DOMXPath($document);
+        $this->assertSame(1, $xpath->query('//form[contains(@action, "/commande/'.$order->id.'/virement")]')->length);
+
+        $this->post($url.'/virement')->assertRedirect($url.'/virement');
+        $this->get($url.'/virement')->assertOk()->assertSee('DE36000000000000000000')
+            ->assertSee(__('commerce.bank_recorded'))
+            ->assertSee(__('commerce.finish_order'))
+            ->assertSee('href="'.route('order.show', ['locale' => 'fr', 'id' => $order->id]).'"', false);
+        $this->assertSame('pending_bank_transfer', $orders->owned($order->id, $order->owner_hash)->status);
+        $this->assertNull($orders->owned($order->id, $order->owner_hash)->paid_at);
     }
 
     public function test_deferred_expiry_releases_once_and_payment_activation_preserves_deadline(): void

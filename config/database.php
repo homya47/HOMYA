@@ -47,6 +47,21 @@ return [
 
     'connections' => $archiveConnections + [
 
+        // A separately provisioned production identity with SELECT grants only on
+        // the immutable archive tables. It must never reuse the commerce writer.
+        'homya_hosted_catalogue_reader' => [
+            'driver' => 'mariadb', 'url' => null,
+            'host' => env('HOMYA_CATALOGUE_DB_HOST', 'localhost'),
+            'port' => env('HOMYA_CATALOGUE_DB_PORT', '3306'),
+            'database' => env('HOMYA_CATALOGUE_DB_DATABASE', ''),
+            'username' => env('HOMYA_CATALOGUE_DB_USERNAME', ''),
+            'password' => env('HOMYA_CATALOGUE_DB_PASSWORD', ''),
+            'unix_socket' => env('HOMYA_CATALOGUE_DB_SOCKET') ?: null,
+            'charset' => 'utf8mb4', 'collation' => 'utf8mb4_bin',
+            'prefix' => '', 'prefix_indexes' => true, 'strict' => true,
+            'engine' => 'InnoDB', 'options' => [],
+        ],
+
         // Dedicated credentials; never inherit the immutable catalogue reader's permissions.
         'commerce' => [
             'driver' => 'mariadb',

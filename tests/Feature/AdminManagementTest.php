@@ -114,6 +114,23 @@ final class AdminManagementTest extends TestCase
         $this->assertSame(1, DB::connection('commerce')->table('commerce_admin_messages')->count());
     }
 
+    public function test_message_sql_payload_remains_bound_encrypted_data_and_cannot_change_authorization(): void
+    {
+        $payload = "x'); DROP TABLE commerce_admin_messages; -- <script>fixture</script>";
+        $db = DB::connection('commerce');
+        $db->enableQueryLog();
+        $ticket = app(Messages::class)->create(['name' => 'Fixture', 'email' => ''], $payload, (string) Str::uuid());
+        $this->assertSame($payload, app(Messages::class)->thread($ticket['id'])['messages']->first()->body);
+        $this->assertSame(1, $db->table('commerce_admin_messages')->count());
+        $this->assertFalse(app(Messages::class)->authorize("' OR 1=1 --", $ticket['code']));
+        foreach ($db->getQueryLog() as $query) {
+            $this->assertStringNotContainsString($payload, $query['query']);
+            $this->assertStringNotContainsString("' OR 1=1 --", $query['query']);
+        }
+        $db->disableQueryLog();
+        $this->get('/fr/assistance/'.$ticket['id'])->assertNotFound();
+    }
+
     public function test_marking_read_returns_to_the_screen_even_after_a_notification_request(): void
     {
         $ticket = app(Messages::class)->create(['name' => 'Fixture', 'email' => ''], 'Question', (string) Str::uuid());
@@ -240,7 +257,7 @@ final class AdminManagementTest extends TestCase
         try {
             $settings = app(PrivateSettings::class);
             $version = $settings->version();
-            $settings->save(['HOMYA_CONTACT_PHONE' => '+33123456789', 'STRIPE_SECRET_KEY' => 'sk_test_fixtureonly'], $version);
+            $settings->save(['HOMYA_CONTACT_PHONE' => '+33123456789', 'HOMYA_BANK_NAME' => 'Banque fixture'], $version);
             $actual = File::get($this->temporary.'/.env');
             $this->assertStringContainsString('DB_PASSWORD=PRIVATE_FIXTURE', $actual);
             $this->assertSame(0600, fileperms($this->temporary.'/.env') & 0777);
@@ -259,6 +276,30 @@ final class AdminManagementTest extends TestCase
             $this->assertStringContainsString('PRIVATE_FIXTURE', Crypt::decryptString(File::get($backup)));
         } finally {
             $this->app->useEnvironmentPath($path);
+        }
+    }
+
+    public function test_settings_no_longer_offer_or_allow_stripe_credentials(): void
+    {
+        $this->withSession($this->auth())->get('/admin/parametres')->assertOk()->assertDontSee('Stripe')->assertDontSee('name="secret"', false)->assertDontSee('name="publishable_key"', false)->assertDontSee('name="mode"', false)->assertSee('name="iban"', false);
+        $this->assertNotContains('STRIPE_SECRET_KEY', PrivateSettings::KEYS);
+        $this->assertNotContains('STRIPE_PUBLISHABLE_KEY', PrivateSettings::KEYS);
+        $this->assertNotContains('STRIPE_WEBHOOK_SECRET', PrivateSettings::KEYS);
+        $original = $this->app->environmentPath();
+        $this->app->useEnvironmentPath($this->temporary);
+        File::put($this->temporary.'/.env', "PROTECTED_FIXTURE=before\n");
+        try {
+            $this->post('/admin/parametres', [
+                'version' => app(PrivateSettings::class)->version(),
+                'email' => 'homya@example.invalid',
+                'current_password' => 'fixture-private-password',
+            ])->assertRedirect()->assertSessionHasNoErrors();
+            $actual = File::get($this->temporary.'/.env');
+            $this->assertStringContainsString('PROTECTED_FIXTURE=before', $actual);
+            $this->assertStringContainsString('HOMYA_CONTACT_EMAIL=', $actual);
+            $this->assertStringNotContainsString('STRIPE_', $actual);
+        } finally {
+            $this->app->useEnvironmentPath($original);
         }
     }
 
@@ -376,7 +417,7 @@ final class AdminManagementTest extends TestCase
         $this->app->useEnvironmentPath($this->temporary);
         File::put($this->temporary.'/.env', "PROTECTED_FIXTURE=before\n");
         try {
-            $data = ['version' => app(PrivateSettings::class)->version(), 'mode' => 'test', 'email' => 'homya@example.invalid', 'current_password' => 'wrong'];
+            $data = ['version' => app(PrivateSettings::class)->version(), 'email' => 'homya@example.invalid', 'current_password' => 'wrong'];
             $this->withSession($this->auth())->post('/admin/parametres', $data)->assertSessionHasErrors('current_password');
             $data['current_password'] = 'fixture-private-password';
             $data['bank_enabled'] = true;

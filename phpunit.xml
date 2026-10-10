@@ -18,6 +18,7 @@
         </include>
     </source>
     <php>
+        <ini name="memory_limit" value="512M"/>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
@@ -25,15 +26,13 @@
         <env name="CACHE_STORE" value="array"/>
         <!-- La bascule locale SQL ne doit pas charger un accès réel dans cette suite hors base. -->
         <env name="HOMYA_CATALOGUE_SOURCE" value="files" force="true"/>
-        <!-- Tests isolés : aucune lecture de stock réel, ni clé Stripe du poste. -->
+        <!-- Tests isolés : aucune lecture de stock réel, ni prestataire de paiement réel. -->
         <env name="HOMYA_ADMIN_MANAGEMENT_ENABLED" value="false" force="true"/>
         <env name="HOMYA_INVENTORY_ENABLED" value="false" force="true"/>
         <env name="HOMYA_CHECKOUT_ENABLED" value="false" force="true"/>
         <env name="HOMYA_DEFERRED_ORDERS_ENABLED" value="false" force="true"/>
         <env name="HOMYA_COMMERCE_LEGAL_READY" value="false" force="true"/>
         <env name="HOMYA_BANK_TRANSFER_ENABLED" value="false" force="true"/>
-        <env name="STRIPE_SECRET_KEY" value="" force="true"/>
-        <env name="STRIPE_WEBHOOK_SECRET" value="" force="true"/>
         <!-- Tests du socle sans requête ni migration ; aucune preuve MariaDB implicite. -->
         <env name="DB_CONNECTION" value="mariadb"/>
         <env name="DB_DATABASE" value="homya_test_not_created"/>

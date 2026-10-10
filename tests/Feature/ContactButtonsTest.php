@@ -84,14 +84,38 @@ class ContactButtonsTest extends TestCase
 
     public function test_configured_contact_is_translated_and_available_in_the_page_and_footer(): void
     {
-        config(['contact.phone' => '+33123456789']);
+        config(['contact.phone' => '+33123456789', 'contact.email' => 'support@homya.eu']);
         foreach (['fr', 'en', 'de'] as $locale) {
             $response = $this->get('/'.$locale.'/contact')->assertOk()
                 ->assertSee(__('contact.intro', [], $locale))
                 ->assertSee(__('contact.instructions', [], $locale))
                 ->assertDontSee(__('pages.pending', [], $locale));
-            $this->assertSame(3, substr_count($response->getContent(), 'href="https://wa.me/33123456789"'));
-            $this->assertSame(2, substr_count($response->getContent(), 'href="sms:+33123456789"'));
+            $this->assertGreaterThanOrEqual(4, substr_count($response->getContent(), 'href="https://wa.me/33123456789"'));
+            $this->assertSame(0, substr_count($response->getContent(), 'href="sms:+33123456789"'));
+            $this->assertStringNotContainsString('tel:+33123456789', $response->getContent());
+            $this->assertStringContainsString('href="mailto:'.config('contact.email').'"', $response->getContent());
+            $phoneLinks = (new \DOMXPath((function () use ($response) {
+                $document = new \DOMDocument;
+                @$document->loadHTML('<?xml encoding="UTF-8">'.$response->getContent());
+                return $document;
+            })()))->query('//a[normalize-space(.)="+33123456789"]');
+            $this->assertGreaterThanOrEqual(4, $phoneLinks->length);
+            foreach ($phoneLinks as $phoneLink) {
+                $this->assertSame('https://wa.me/33123456789', $phoneLink->getAttribute('href'));
+                $this->assertSame('_blank', $phoneLink->getAttribute('target'));
+            }
+            $footerStart = strpos($response->getContent(), '<footer');
+            $footerEnd = strpos($response->getContent(), '</footer>', $footerStart);
+            $footer = substr($response->getContent(), $footerStart, $footerEnd - $footerStart);
+            $this->assertStringContainsString('wa.me/33123456789', $footer);
+            $this->assertStringNotContainsString('sms:', $footer);
+            $pageStart = strpos($response->getContent(), '<main');
+            $pageEnd = strpos($response->getContent(), '</main>', $pageStart);
+            $page = substr($response->getContent(), $pageStart, $pageEnd - $pageStart);
+            $this->assertStringContainsString('wa.me/33123456789', $page);
+            $this->assertStringNotContainsString('sms:', $page);
+            $this->assertStringContainsString('mailto:'.config('contact.email'), $page);
+            $this->assertStringNotContainsString('tel:+33123456789', $page);
         }
     }
 }
