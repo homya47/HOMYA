@@ -9,7 +9,7 @@ use App\Services\ContactChannels;
 
 class InformationController extends Controller
 {
-    public const PAGES = ['a-propos', 'provenance', 'conseiller', 'contact', 'livraison', 'retractation', 'paiement', 'suivi', 'avis', 'mentions-legales', 'cgv', 'confidentialite', 'cookies'];
+    public const PAGES = ['a-propos', 'provenance', 'conseiller', 'contact', 'livraison', 'retractation', 'paiement', 'suivi', 'mentions-legales', 'cgv', 'confidentialite', 'cookies'];
 
     public function __invoke(Catalogue $catalogue, ContactChannels $channels, string $locale, string $page)
     {
@@ -27,10 +27,9 @@ class InformationController extends Controller
             $content['pending'] = false;
         }
         $readiness = app(CheckoutReadiness::class);
-        $deferredOnly = $readiness->deferredReady() && ! $readiness->cardReady() && ! $readiness->bankReady();
+        $deferredOnly = $readiness->deferredReady() && ! $readiness->bankReady();
         if ($deferredOnly) {
             if ($page === 'paiement') {
-                $content['intro'] = __('commerce.status.pending_payment_details');
                 $content['paragraphs'] = [__('commerce.deferred_notice'), __('commerce.cart_reservation_notice'), __('commerce.deferred_contact')];
             }
             if ($page === 'suivi') {

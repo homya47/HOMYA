@@ -38,18 +38,26 @@ class LegalInformationTest extends TestCase
         return new DOMXPath($document);
     }
 
-    public function test_every_language_preserves_all_three_jurisdictions_and_marks_the_documents_as_drafts(): void
+    public function test_every_language_preserves_all_three_jurisdictions_without_the_removed_notices(): void
     {
         foreach (['fr', 'en', 'de'] as $locale) {
             foreach (self::PAGES as $page) {
                 $content = __('pages.entries.'.$page, [], $locale);
                 $response = $this->get('/'.$locale.'/'.$page)->assertOk()
-                    ->assertSee(__('legal.draft', [], $locale))
-                    ->assertSee(__('legal.draft_detail', [], $locale))
-                    ->assertSee(__('legal.scope', [], $locale))
+                    ->assertDontSee(__('legal.draft', [], $locale))
+                    ->assertDontSee(__('legal.draft_detail', [], $locale))
+                    ->assertDontSee(__('legal.scope', [], $locale))
                     ->assertDontSee('legal.', false)
                     ->assertDontSee('damdam', false);
                 $xpath = $this->xpath($response->getContent());
+                $this->assertTrue($content['pending']);
+                $this->assertSame(0, $xpath->query('//*[contains(@class,"information-status") or contains(@class,"legal-scope")]')->length);
+                if ($page === 'cgv') {
+                    $payment = collect($content['sections'])->firstWhere('id', 'commande');
+                    foreach ([2, 3] as $index) {
+                        $response->assertDontSee($payment['paragraphs'][$index]);
+                    }
+                }
                 $this->assertSame(1, $xpath->query('//h1')->length);
                 $this->assertSame($content['title'], $xpath->query('//h1')->item(0)->textContent);
                 foreach (['france', 'belgique', 'allemagne'] as $country) {
@@ -178,26 +186,26 @@ class LegalInformationTest extends TestCase
         }
     }
 
-    public function test_shipping_payment_and_terms_keep_operational_unknowns_visible(): void
+    public function test_shipping_payment_and_terms_describe_the_customer_purchase_path(): void
     {
         $expected = [
-            'fr' => ['Livraison gratuite en France, en Belgique et en Allemagne.', 'lieu d’expédition', 'Les logos ne constituent pas une confirmation', 'Le délai global annoncé'],
-            'en' => ['Free delivery in France, Belgium and Germany.', 'dispatch location', 'Logos do not confirm acceptance', 'The stated overall delivery period'],
-            'de' => ['Kostenlose Lieferung in Frankreich, Belgien und Deutschland.', 'Versandort', 'Die Logos bestätigen weder Akzeptanz', 'Die angekündigte Gesamtlieferzeit'],
+            'fr' => ['Livraison gratuite en France, en Belgique et en Allemagne.', 'volumineux', 'référence de commande', 'Le délai global annoncé'],
+            'en' => ['Free delivery in France, Belgium and Germany.', 'bulky', 'order reference', 'The stated overall delivery period'],
+            'de' => ['Kostenlose Lieferung in Frankreich, Belgien und Deutschland.', 'sperrige', 'Bestellreferenz', 'Die angekündigte Gesamtlieferzeit'],
         ];
-        foreach ($expected as $locale => [$shipping, $dispatch, $logos, $handling]) {
-            $this->get('/'.$locale.'/livraison')->assertOk()->assertSee($shipping)->assertSee($dispatch);
-            $this->get('/'.$locale.'/paiement')->assertOk()->assertSee($logos)->assertSee('Visa, Mastercard');
-            $this->get('/'.$locale.'/cgv')->assertOk()->assertSee($handling)->assertSee('Visa, Mastercard');
+        foreach ($expected as $locale => [$shipping, $access, $reference, $handling]) {
+            $this->get('/'.$locale.'/livraison')->assertOk()->assertSee($shipping)->assertSee($access);
+            $this->get('/'.$locale.'/paiement')->assertOk()->assertSee($reference)->assertSee('72');
+            $this->get('/'.$locale.'/cgv')->assertOk()->assertSee($handling)->assertSee('72');
             $this->get('/'.$locale.'/contact')->assertOk()->assertDontSee('mailto:', false)->assertDontSee('wa.me/', false);
         }
     }
 
     public function test_delivery_period_starts_at_payment_without_inventing_the_type_of_days(): void
     {
-        foreach (['fr' => ['à compter du paiement', 'ouvrés ou calendaires'], 'en' => ['from payment', 'working or calendar days'], 'de' => ['ab Zahlung', 'Werk- oder Kalendertage']] as $locale => [$start, $days]) {
+        foreach (['fr' => ['à compter du paiement', 'jours ouvrés'], 'en' => ['from payment', 'working days'], 'de' => ['ab Zahlung', 'Werktage']] as $locale => [$start, $days]) {
             foreach (['livraison', 'cgv'] as $page) {
-                $this->get('/'.$locale.'/'.$page)->assertOk()->assertSee($start)->assertSee($days);
+                $this->get('/'.$locale.'/'.$page)->assertOk()->assertSee($start)->assertDontSee($days);
             }
         }
     }
@@ -264,7 +272,7 @@ class LegalInformationTest extends TestCase
             'commerce.bank.enabled' => false, 'commerce.stripe.secret' => '']);
         foreach (['fr', 'en', 'de'] as $locale) {
             $this->get('/'.$locale.'/cgv')->assertOk()
-                ->assertSee(__('commerce.deferred_legal_notice', [], $locale))->assertSee('72');
+                ->assertDontSee(__('commerce.deferred_legal_notice', [], $locale))->assertSee('72');
             $this->get('/'.$locale.'/confidentialite')->assertOk()
                 ->assertSee(__('commerce.deferred_data_notice', [], $locale))->assertSee('IGN');
             $this->get('/'.$locale.'/retractation')->assertOk()

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Services\Catalogue;
 use DOMDocument;
 use DOMXPath;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,50 @@ class CatalogueTest extends TestCase
         return new DOMXPath($document);
     }
 
+    public function test_variant_urls_preselect_exact_option_in_every_language_without_accepting_invalid_options(): void
+    {
+        $path = $this->archive.'/products/test-produit-001.json';
+        $product = json_decode(File::get($path), true);
+        $product['has_variants'] = true;
+        $product['variants'] = [['title' => '20 cm', 'sku' => 'REF-1-A'], ['title' => 'Note', 'sku' => 'REF-1-B']];
+        File::put($path, json_encode($product));
+        foreach (['fr', 'en', 'de'] as $locale) {
+            $response = $this->get('/'.$locale.'/produit/test-produit-001?variant=v2')->assertOk();
+            $xpath = $this->xpath($response->getContent());
+            $this->assertSame('v2', $xpath->query('//select[@name="variant"]/option[@selected]')->item(0)->getAttribute('value'));
+            $this->assertStringContainsString($locale === 'de' ? 'Hinweis' : 'Note', $xpath->query('//h1')->item(0)->textContent);
+            $response->assertSee('/fr/produit/test-produit-001?variant=v2', false)->assertSee('variant=v1', false);
+            $response->assertDontSee(__('catalogue.variant_photo_notice', [], $locale));
+        }
+        foreach (['v3', 'v0', 'v02', '', ['v1']] as $invalid) {
+            $this->get('/fr/produit/test-produit-001?'.http_build_query(['variant' => $invalid]))->assertNotFound();
+        }
+        $this->get('/fr/produit/test-produit-002?variant=v1')->assertNotFound();
+        $this->assertSame($product, json_decode(File::get($path), true));
+    }
+
+    public function test_unresolved_description_uses_existing_facts_and_conflicting_specs_are_not_presented_as_verified(): void
+    {
+        $path = $this->archive.'/products/test-produit-001.json';
+        $product = json_decode(File::get($path), true);
+        $product['description'] = '$7e';
+        $product['specifications'] = [['label' => 'Largeur', 'value' => '20 cm'], ['label' => 'Largeur', 'value' => 'Note']];
+        $product['issues'] = ['description_requires_review', 'conflicting_specification'];
+        File::put($path, json_encode($product));
+        foreach (['fr', 'en', 'de'] as $locale) {
+            app()->setLocale($locale);
+            $presented = app(Catalogue::class)->product($product['slug']);
+            $this->assertStringContainsString('REF-1', $presented['description']);
+            $this->assertNotContains('description_requires_review', $presented['issues']);
+            $this->assertContains('conflicting_specification', $presented['issues']);
+            $this->assertCount(1, $presented['specifications']);
+            $this->assertNotSame('20 cm', $presented['specifications'][0]['value']);
+            $this->assertCount(1, $presented['specification_reviews']);
+            $this->get('/'.$locale.'/produit/test-produit-001')->assertOk()->assertDontSee('$7e')->assertSee('REF-1');
+        }
+        $this->assertSame($product, json_decode(File::get($path), true));
+    }
+
     private function imageFixture(int $width, int $height, string $filename): array
     {
         $this->withoutVite();
@@ -89,7 +134,7 @@ class CatalogueTest extends TestCase
         return $path;
     }
 
-    public function test_small_photos_and_associated_description_are_omitted_in_all_languages_without_source_changes(): void
+    public function test_small_photos_are_omitted_but_valid_description_is_kept_without_source_changes(): void
     {
         $smallWidth = $this->imageFixture(499, 600, str_repeat('a', 24).'.png');
         $valid = $this->imageFixture(500, 500, str_repeat('b', 24).'.png');
@@ -100,12 +145,12 @@ class CatalogueTest extends TestCase
         foreach (['fr', 'en', 'de'] as $locale) {
             $response = $this->get('/'.$locale.'/produit/test-produit-001')->assertOk()->assertSee($valid['local_url'], false)
                 ->assertDontSee($smallWidth['local_url'], false)->assertDontSee($smallHeight['local_url'], false)
-                ->assertSee(__('catalogue.content_unavailable', [], $locale))->assertSee('REF-1')->assertSee('20 cm');
+                ->assertDontSee(__('catalogue.content_unavailable', [], $locale))->assertSee('REF-1')->assertSee('20 cm');
             $xpath = $this->xpath($response->getContent());
-            $this->assertSame(0, $xpath->query('//p[@class="product-description"]')->length);
+            $this->assertSame(1, $xpath->query('//p[@class="product-description"]')->length);
             $this->assertSame(0, $xpath->query('//button[@data-gallery-src]')->length);
             $this->assertSame(__('catalogue.image_count', ['current' => 1, 'total' => 1], $locale), $xpath->query('//p[@data-gallery-caption]')->item(0)->textContent);
-            $this->assertSame($xpath->query('//h1')->item(0)->textContent, $xpath->query('//meta[@name="description"]')->item(0)->getAttribute('content'));
+            $this->assertStringContainsString('alert(1)', $xpath->query('//meta[@name="description"]')->item(0)->getAttribute('content'));
             $this->get('/'.$locale.'/catalogue?q=REF-1')->assertOk()->assertDontSee($smallWidth['local_url'], false);
         }
         $this->assertSame($original, File::get($path));
@@ -119,7 +164,7 @@ class CatalogueTest extends TestCase
         $response = $this->get('/fr/produit/test-produit-001')->assertOk()->assertSee('123,45 €')
             ->assertSee(__('catalogue.image_missing', [], 'fr'))->assertDontSee($image['local_url'], false);
         $xpath = $this->xpath($response->getContent());
-        $this->assertSame(0, $xpath->query('//img[@data-product-image]|//button[@data-gallery-src]|//p[@data-gallery-caption]|//p[@class="product-description"]')->length);
+        $this->assertSame(0, $xpath->query('//img[@data-product-image]|//button[@data-gallery-src]|//p[@data-gallery-caption]')->length);
         // A genuine replacement of adequate size restores content without editing source JSON.
         $this->imageFixture(500, 500, str_repeat('d', 24).'.png');
         $this->get('/fr/produit/test-produit-001')->assertOk()->assertSee($image['local_url'], false)
@@ -134,7 +179,7 @@ class CatalogueTest extends TestCase
         $disguised = $this->imageFixture(500, 500, str_repeat('f', 24).'.jpg');
         $this->productImages([$disguised]);
         $this->get('/en/produit/test-produit-001')->assertOk()->assertDontSee($disguised['local_url'], false)
-            ->assertDontSee('Test description')->assertSee(__('catalogue.content_unavailable', [], 'en'));
+            ->assertSee('Test description')->assertDontSee(__('catalogue.content_unavailable', [], 'en'));
     }
 
     public function test_index_card_uses_a_valid_secondary_photo_when_the_primary_is_too_small(): void
@@ -167,7 +212,7 @@ class CatalogueTest extends TestCase
         foreach (['fr', 'en', 'de'] as $locale) {
             $this->get('/'.$locale.'/produit/test-produit-001')->assertOk()->assertSee($replacement['local_url'], false)
                 ->assertDontSee($small['local_url'], false)->assertDontSee('manufacturer.example', false)->assertDontSee('damdam', false)
-                ->assertSee(__('catalogue.content_unavailable', [], $locale))->assertSee('REF-1');
+                ->assertDontSee(__('catalogue.content_unavailable', [], $locale))->assertSee('REF-1');
             $this->get('/'.$locale.'/catalogue?q=REF-1&min=123.45&max=123.45')->assertOk()->assertSee($replacement['local_url'], false);
         }
         $this->assertSame($original, File::get($path));
@@ -202,7 +247,7 @@ class CatalogueTest extends TestCase
             $this->assertSame(1, $xpath->query('//nav[@class="pagination"]//*[@aria-current="page"]')->length);
             $this->assertSame(0, $xpath->query('//input[@name="quantity" and @type!="hidden"]')->length);
             $this->assertSame(0, $xpath->query('//input[@id="catalogue-search"][@disabled]')->length);
-            $response->assertSee(__('catalogue.preview_notice', [], $locale));
+            $response->assertDontSee(__('catalogue.preview_notice', [], $locale));
             $response->assertDontSee('damdam', false)->assertDontSee('source descriptions', false);
         }
     }
@@ -374,7 +419,7 @@ class CatalogueTest extends TestCase
         $product['description'] = '$7e';
         File::put($path, json_encode($product));
         foreach (['fr', 'en', 'de'] as $locale) {
-            $this->get('/'.$locale.'/produit/test-produit-001')->assertOk()->assertDontSee('$7e')->assertSee(__('catalogue.data_review', [], $locale));
+            $this->get('/'.$locale.'/produit/test-produit-001')->assertOk()->assertDontSee('$7e')->assertSee('REF-1');
         }
         $this->assertSame('$7e', json_decode(File::get($path), true)['description']);
     }

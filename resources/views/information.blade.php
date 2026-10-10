@@ -8,17 +8,15 @@
             <article>
                 @unless($page === 'conseiller')<header class="information-heading"><p class="eyebrow">HOMYA · {{ __('pages.information') }}</p><h1>{{ $content['title'] }}</h1><p>{{ $content['intro'] }}</p></header>@endunless
                 @if($page === 'a-propos')<img class="information-image" src="{{ asset('media/home/interieur-display.webp') }}" width="1600" height="600" alt="{{ __('home.hero_alt') }}" decoding="async">@endif
-                @if($content['pending'] && ! $isLegal)<div class="information-status" role="note"><strong>{{ __('pages.pending') }}</strong><p>{{ $deferredOnly ? __('commerce.deferred_notice') : __('pages.pending_detail') }}</p></div>@endif
                 @if($isLegal)
                     @if($page === 'retractation')<x-return-overview :locale="$locale" />@endif
                     <x-legal-document :content="$content" :page="$page" />
                 @else
                     <section class="information-copy" aria-label="{{ $content['title'] }}">@foreach($content['paragraphs'] as $paragraph)<p>{{ $paragraph }}</p>@endforeach</section>
                 @endif
-                @if($page === 'contact')<x-company-details /><x-contact-actions />@endif
-                @if($page === 'paiement')<p><a class="button-secondary" href="{{ route('checkout.card-preview', ['locale' => $locale]) }}">{{ __('commerce.card_form.preview_link') }}</a></p>@endif
+                @if($page === 'contact')<x-company-details /><x-contact-actions email-phone-only />@endif
                 @if(in_array($page, ['provenance', 'conseiller'], true))
-                    <section id="questions" class="information-faq" aria-labelledby="faq-heading" tabindex="-1"><h2 id="faq-heading">{{ __('pages.questions') }}</h2>@foreach(__('pages.faq') as $item)<details><summary>{{ $item['question'] }}</summary><p>{{ $deferredOnly && $loop->last ? __('commerce.deferred_notice') : $item['answer'] }}</p></details>@endforeach</section>
+                    <section id="questions" class="information-faq" aria-labelledby="faq-heading" tabindex="-1"><h2 id="faq-heading">{{ __('pages.questions') }}</h2>@foreach(__('pages.faq') as $item)<details><summary>{{ $item['question'] }}</summary><p>{{ $item['answer'] }}</p></details>@endforeach</section>
                 @endif
                 <div class="information-actions"><a class="button-primary" href="{{ route('catalogue', ['locale' => $locale]) }}">{{ __('home.all_catalogue') }} <span aria-hidden="true">→</span></a><a href="{{ route('home', ['locale' => $locale]) }}#universes">{{ __('home.explore') }}</a></div>
             </article>

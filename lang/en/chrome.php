@@ -10,6 +10,7 @@ return [
         'conseiller' => 'Choosing your appliance',
         'provenance' => 'Catalogue & FAQ',
         'suivi' => 'Track my order',
+        'phone' => 'HOMYA phone',
     ],
     'services' => [
         'conseiller' => 'Advice',
@@ -20,9 +21,8 @@ return [
     'help_title' => 'Help & contact',
     'legal_title' => 'Legal information',
     'commerce_title' => 'Payment & delivery',
-    'payment_planned' => 'Planned payment methods',
-    'card' => 'Payment card',
-    'transfer' => 'Bank transfer',
+    'payment_planned' => 'Payment & delivery',
+    'instant_transfer' => 'Instant bank transfer',
     'commerce_detail' => 'Free delivery in France, Belgium and Germany in 3 to 7 days by our own carrier. Payment terms will be provided before orders open.',
     'discoveries_title' => 'Explore the catalogue',
     'categories' => [

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'contact_notice' => 'Senden Sie Ihre Frage in einem privaten Gespräch und lesen Sie dort die Antworten von HOMYA. Bewahren Sie Referenz und Zugangscode auf. Post ist weiterhin an die folgende Adresse möglich; Telefon und E-Mail werden nach Bestätigung ergänzt. Automatische E-Mails werden ohne eingerichteten Versanddienst nicht angekündigt.',
+    'contact_notice' => 'Senden Sie Ihre Frage in einem privaten Gespräch und lesen Sie dort die Antworten von HOMYA. Bewahren Sie Referenz und Zugangscode auf. Sie können auch die unten angegebenen E-Mail-, Telefon-, WhatsApp- oder SMS-Kontaktdaten nutzen.',
     'title' => 'HOMYA kontaktieren',
     'intro' => 'Senden Sie Ihre Frage und lesen Sie Antworten in Ihrem privaten Gespräch.',
     'new' => 'Neue Nachricht',

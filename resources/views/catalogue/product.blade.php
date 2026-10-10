@@ -21,7 +21,6 @@
                     <div class="gallery-controls">@foreach($product['images'] as $image)<button type="button" data-gallery-src="{{ $image['local_url'] }}" data-gallery-srcset="{{ app(\App\Services\ResponsiveMedia::class)->srcset($image['local_url']) }}" data-gallery-width="{{ $image['width'] }}" data-gallery-height="{{ $image['height'] }}" data-gallery-number="{{ $loop->iteration }}" aria-label="{{ __('catalogue.show_image', ['number' => $loop->iteration]) }}" aria-pressed="{{ $loop->first ? 'true' : 'false' }}"><span aria-hidden="true">{{ $loop->iteration }}</span><img src="{{ $image['local_url'] }}" @if($thumbnailSet = app(\App\Services\ResponsiveMedia::class)->srcset($image['local_url'])) srcset="{{ $thumbnailSet }}" sizes="80px" @endif @if($image['width'] && $image['height']) width="{{ $image['width'] }}" height="{{ $image['height'] }}" @endif alt="" loading="lazy" data-gallery-thumbnail></button>@endforeach</div>
                 @endif
                 @if($product['images'])<p class="gallery-caption" data-gallery-caption data-template="{{ __('catalogue.image_count') }}" data-total="{{ count($product['images']) }}" aria-live="polite">{{ __('catalogue.image_count', ['current' => 1, 'total' => count($product['images'])]) }}</p>@endif
-                @if(($selectedVariant ?? null) !== null && !($variantImageVerified ?? false))<p class="product-content-unavailable">{{ __('catalogue.variant_photo_notice') }}</p>@endif
             </section>
             <section class="product-summary" aria-labelledby="product-heading">
                 <p class="eyebrow">{{ $product['brand'] }}</p><h1 id="product-heading">{{ $product['name'] }}</h1>
@@ -31,7 +30,6 @@
                 @if($available !== null)<p class="stock-indicator @if($available === 0) stock-empty @endif"><span aria-hidden="true">●</span> {{ __($available > 0 ? 'commerce.in_stock' : 'commerce.out_of_stock') }}</p>@endif
                 @if($product['specifications'])<dl class="product-highlights">@foreach(array_slice($product['specifications'], 0, 4) as $spec)<div><dt>{{ $spec['label'] }}</dt><dd>{{ $spec['value'] }}</dd></div>@endforeach</dl>@endif
                 <dl class="product-overview"><div><dt>{{ __('catalogue.category') }}</dt><dd><a href="{{ route('catalogue', ['locale' => $locale, 'category' => $product['category']['slug']]) }}">{{ $product['category']['name'] }}</a></dd></div>@if($product['condition'])<div><dt>{{ __('catalogue.condition') }}</dt><dd>{{ __('catalogue.conditions')[$product['condition']] ?? $product['condition'] }}</dd></div>@endif</dl>
-                @if($product['description_hidden'])<p class="product-content-unavailable">{{ __('catalogue.content_unavailable') }}</p>@endif
                 <x-purchase-information :locale="$locale" id="product-purchase-information" open />
                 @if(app(\App\Services\Commerce\Cart::class)->eligible($product))
                     <x-commerce-errors />
@@ -41,9 +39,7 @@
                         <div class="product-buy-row"><x-quantity-selector id="product-quantity" :value="old('quantity', 1)" :max="config('commerce.max_quantity')" /><x-add-to-cart-button name="intent" value="cart" :disabled="$available === 0" /></div>
                         <button class="button-primary product-buy-now" type="submit" name="intent" value="checkout" @disabled($available === 0)>{{ __(app(\App\Services\Commerce\CheckoutReadiness::class)->ready() ? 'commerce.buy_now' : 'commerce.prepare_order') }}</button>
                     </form>
-                    @unless(app(\App\Services\Commerce\CheckoutReadiness::class)->ready())<p>{{ __('commerce.cart_notice') }}</p>@endunless
                 @else<p>{{ __('commerce.unavailable_product') }}</p>@endif
-                @if($product['issues'])<div class="data-warning"><h2>{{ __('catalogue.data_review') }}</h2><p>{{ __('catalogue.data_review_help') }}</p></div>@endif
                 <a class="button-primary" href="{{ $catalogueLink }}">{{ __('catalogue.back_catalogue') }}</a>
             </section>
         </div>

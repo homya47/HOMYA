@@ -11,9 +11,6 @@
             <section class="commerce-summary" aria-labelledby="bank-details-heading">
                 <h2 id="bank-details-heading">{{ __('commerce.bank_how_to') }}</h2>
                 @if($active && $snapshot)
-                    @if(($snapshot['source'] ?? null) === 'card_unavailable')
-                        <div class="card-form-notice" role="status"><strong>{{ __('commerce.card_form.fallback_title') }}</strong><p>{{ __('commerce.card_form.fallback_notice') }}</p></div>
-                    @endif
                     <p role="status">{{ __('commerce.bank_recorded') }}</p>
                     <p class="bank-deadline"><strong>{{ __('commerce.bank_due') }} <time datetime="{{ $deadline->toIso8601String() }}">{{ $deadline->format('d/m/Y H:i:s') }} (Europe/Paris)</time></strong></p>
                     <p>{{ __('commerce.bank_deadline_notice') }}</p>
@@ -53,6 +50,12 @@
                 @endif
                 <p><a href="{{ route('information', ['locale' => $locale, 'page' => 'contact']) }}">{{ __('chrome.contact') }}</a></p>
             </section>
+            @if($active && $snapshot)
+                <div class="bank-finish-order">
+                    <a class="button-primary" href="{{ route('order.show', ['locale' => $locale, 'id' => $order->id]) }}">{{ __('commerce.finish_order') }}</a>
+                    <p>{{ __('commerce.bank_recorded') }}</p>
+                </div>
+            @endif
             <section class="bank-order-summary">
                 <a class="bank-download" href="{{ route('order.document', ['locale' => $locale, 'id' => $order->id, 'kind' => 'summary']) }}">↓ {{ __('commerce.pdf_summary') }} (PDF)</a>
                 <details class="bank-accordion"><summary>{{ __('commerce.order_details') }}</summary>

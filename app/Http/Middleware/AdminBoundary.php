@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AdminBoundary
 {
-    public const CSP = "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
+    public const CSP = "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
 
     public function handle(Request $request, Closure $next): Response
     {
@@ -27,7 +27,9 @@ final class AdminBoundary
         $response->headers->set('Referrer-Policy', 'no-referrer');
         $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
         $response->headers->set('X-Frame-Options', 'DENY');
-        $response->headers->set('Content-Security-Policy', self::CSP);
+        if (! $response->headers->has('Content-Security-Policy')) {
+            $response->headers->set('Content-Security-Policy', self::CSP);
+        }
 
         return $response;
     }

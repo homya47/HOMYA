@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'contact_notice' => 'Send your question in a private conversation and read HOMYA’s replies there. Keep its reference and access code. Postal mail remains available at the address below; phone and email will be added when confirmed. Automatic email is not claimed without a configured sending service.',
+    'contact_notice' => 'Send your question in a private conversation and read HOMYA’s replies there. Keep its reference and access code. You can also use the email, telephone, WhatsApp or SMS details below.',
     'title' => 'Contact HOMYA',
     'intro' => 'Send your question and read replies in your private conversation.',
     'new' => 'New message',

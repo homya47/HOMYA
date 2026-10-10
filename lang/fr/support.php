@@ -12,7 +12,7 @@ return [
     'send' => 'Envoyer mon message',
     'privacy' => 'Vos coordonnées et messages servent à traiter votre demande.',
     'privacy_link' => 'Politique de confidentialité',
-    'contact_notice' => 'Vous pouvez envoyer votre question dans un dossier privé et y lire les réponses de HOMYA. Conservez sa référence et son code d’accès. Le courrier reste possible à l’adresse ci-dessous ; le téléphone et l’e-mail seront ajoutés après confirmation. Aucun e-mail automatique n’est annoncé sans service d’envoi configuré.',
+    'contact_notice' => 'Envoyez votre question dans un dossier privé et retrouvez-y les réponses de HOMYA. Conservez sa référence et son code d’accès. Vous pouvez également utiliser l’e-mail, le téléphone, WhatsApp ou SMS ci-dessous.',
     'resume' => 'Reprendre une conversation',
     'reference' => 'Référence du dossier',
     'code' => 'Code d’accès privé',

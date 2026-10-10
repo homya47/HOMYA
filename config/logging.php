@@ -60,6 +60,7 @@ return [
 
         'single' => [
             'driver' => 'single',
+            'permission' => 0600,
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
@@ -67,6 +68,7 @@ return [
 
         'daily' => [
             'driver' => 'daily',
+            'permission' => 0600,
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'max_files' => env('LOG_DAILY_DAYS', 14),
@@ -75,6 +77,7 @@ return [
 
         'monthly' => [
             'driver' => 'monthly',
+            'permission' => 0600,
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'max_files' => 3,

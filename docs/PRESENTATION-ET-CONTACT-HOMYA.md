@@ -20,3 +20,11 @@ Préparation : `HOMYA_CONTACT_PHONE` dans `.env.example`, vide par défaut ; ser
 Les tests emploient un numéro synthétique dans la seule configuration en mémoire ; ils ne suivent pas les liens et n’émettent aucun message. La disponibilité réelle du compte WhatsApp, l’application SMS de l’appareil et la réception des messages restent à vérifier après réception du numéro. Aucun délai de réponse ou permanence de support n’est annoncé.
 
 Les preuves locales sont conservées dans `output/qa-company-contact-20261008/`. Cette étape documente une présentation et ne constitue pas une activation commerciale ou une intégration de messagerie achevée.
+
+## Coordonnées confirmées — 10/10/2026
+
+L’utilisateur a communiqué `support@homya.eu` et `0756894951`. Le numéro français est enregistré au format international `+33756894951` ; le lien WhatsApp est `https://wa.me/33756894951` et le lien SMS est `sms:+33756894951`.
+
+Ces valeurs publiques sont les valeurs par défaut de `config/contact.php` et sont reprises dans `.env.example`. Les paramètres d’environnement restent prioritaires. Le service partagé fournit les coordonnées aux pages Contact, mentions légales, CGV, confidentialité, aux futurs documents commerciaux et aux paramètres d’administration. Le pied de page affiche désormais l’e-mail et le téléphone cliquables ; les boutons WhatsApp du site utilisent le numéro confirmé. Les textes FR/EN/DE annonçant des coordonnées à venir sont corrigés. Les documents commerciaux déjà émis conservent leurs données archivées.
+
+Vérification : les 37 tests existants de contact, informations légales et documents commerciaux passent (3 294 assertions), sans migration ni accès à une base de données réelle. L’installation locale doit être vérifiée sur les pages servies par XAMPP. Aucun message n’est envoyé ; le compte WhatsApp et la réception des e-mails ne sont pas vérifiés par ces tests.

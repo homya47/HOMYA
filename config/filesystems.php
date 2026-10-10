@@ -33,7 +33,8 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // Private documents are delivered by authenticated, owner-checked controllers.
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],

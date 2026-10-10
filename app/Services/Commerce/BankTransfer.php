@@ -45,7 +45,7 @@ final class BankTransfer
         return $customer['bank_transfer'] ?? null;
     }
 
-    public function switch(object $order, OrderStore $orders, ?string $source = null): object
+    public function switch(object $order, OrderStore $orders): object
     {
         $details = $this->details() ?? throw new RuntimeException('Bank transfer unavailable.');
         if ($order->status === 'pending_bank_transfer') {
@@ -56,7 +56,7 @@ final class BankTransfer
             throw new RuntimeException('Legacy card reconciliation required.');
         }
 
-        return $orders->switchToBank($order->id, $details, $source);
+        return $orders->switchToBank($order->id, $details);
     }
 
     public function deadline(object $order): Carbon

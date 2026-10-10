@@ -2,6 +2,7 @@
 
 namespace App\Services\Commerce;
 
+use App\Services\PrivateLocalFiles;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
@@ -21,6 +22,8 @@ final class TransferProof
         $hash = hash('sha256', $bytes);
         $disk = Storage::disk('local');
         $path = $directory.'/'.$hash.'.enc';
+        // Refuse pre-existing linked components before any read, enumeration or write.
+        PrivateLocalFiles::path(rtrim($disk->path(''), DIRECTORY_SEPARATOR), $path, false);
         if ($disk->exists($path)) {
             return;
         }

@@ -10,6 +10,7 @@ return [
         'conseiller' => 'Bien choisir',
         'provenance' => 'Catalogue & FAQ',
         'suivi' => 'Suivre ma commande',
+        'phone' => 'Téléphone HOMYA',
     ],
     'services' => [
         'conseiller' => 'Conseil',
@@ -20,9 +21,8 @@ return [
     'help_title' => 'Aide & contact',
     'legal_title' => 'Informations légales',
     'commerce_title' => 'Paiement & livraison',
-    'payment_planned' => 'Moyens de paiement prévus',
-    'card' => 'Carte bancaire',
-    'transfer' => 'Virement bancaire',
+    'payment_planned' => 'Paiement & livraison',
+    'instant_transfer' => 'Virement instantané',
     'commerce_detail' => 'Livraison gratuite en France, en Belgique et en Allemagne, en 3 à 7 jours par notre propre transporteur. Les modalités de paiement seront précisées avant l’ouverture des commandes.',
     'discoveries_title' => 'À découvrir dans le catalogue',
     'categories' => [

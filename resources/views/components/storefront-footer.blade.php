@@ -14,26 +14,16 @@
             <li><a href="{{ route('promotions', ['locale' => app()->getLocale()]) }}">{{ __('promotions.title') }}</a></li>
         </ul></nav>
         <nav aria-labelledby="footer-help-heading"><h2 id="footer-help-heading">{{ __('chrome.help_title') }}</h2><ul>
-            @foreach(['conseiller', 'provenance', 'suivi', 'contact', 'a-propos', 'avis'] as $page)<li><a href="{{ route('information', ['locale' => app()->getLocale(), 'page' => $page]) }}">{{ __('pages.entries.'.$page.'.title') }}</a></li>@endforeach
+            @foreach(['conseiller', 'provenance', 'suivi', 'contact', 'a-propos'] as $page)<li><a href="{{ route('information', ['locale' => app()->getLocale(), 'page' => $page]) }}">{{ __('pages.entries.'.$page.'.title') }}</a></li>@endforeach
         </ul><x-contact-actions compact /></nav>
         <nav aria-labelledby="footer-legal-heading"><h2 id="footer-legal-heading">{{ __('chrome.legal_title') }}</h2><ul>
             @foreach(['mentions-legales', 'cgv', 'confidentialite', 'cookies', 'retractation'] as $page)<li><a href="{{ route('information', ['locale' => app()->getLocale(), 'page' => $page]) }}">{{ __('pages.entries.'.$page.'.title') }}</a></li>@endforeach
         <li><a href="{{ route('returns.create', ['locale' => app()->getLocale()]) }}">{{ __('returns.start') }}</a></li></ul></nav>
         <section class="footer-commerce" aria-labelledby="footer-commerce-heading"><h2 id="footer-commerce-heading">{{ __('chrome.commerce_title') }}</h2>
-            <p class="footer-payment-label">{{ __('chrome.payment_planned') }}</p>
-            <ul class="footer-payment-methods">
-                <li class="footer-payment-card"><span>{{ __('chrome.card') }}</span>
-                    <div class="footer-card-logos">
-                        <span class="footer-card-logo"><img src="{{ asset('media/payments/visa.svg') }}" width="56" height="34" alt="Visa" loading="lazy" decoding="async"></span>
-                        <span class="footer-card-logo"><img src="{{ asset('media/payments/mastercard.svg') }}" width="56" height="34" alt="Mastercard" loading="lazy" decoding="async"></span>
-                        <span class="footer-card-logo"><img src="{{ asset('media/payments/cb.svg') }}" width="56" height="34" alt="CB — Cartes Bancaires" loading="lazy" decoding="async"></span>
-                    </div>
-                </li>
-                <li>{{ __('chrome.transfer') }}</li>
-            </ul>
-            @if(app(\App\Services\Commerce\CheckoutReadiness::class)->ready())<p>{{ __('commerce.shipping_free') }} {{ __('commerce.delivery_estimate') }}</p>@if(!app(\App\Services\Commerce\CheckoutReadiness::class)->cardReady() && !app(\App\Services\Commerce\CheckoutReadiness::class)->bankReady())<p>{{ __('commerce.deferred_notice') }}</p>@endif @else<p>{{ __('chrome.commerce_detail') }}</p>@endif
+            <span class="footer-transfer-logo"><img src="{{ asset('media/payments/instant-transfer.svg') }}" width="40" height="40" alt="" loading="lazy" decoding="async"><span>{{ __('chrome.instant_transfer') }}</span></span>
+            <p>{{ __('commerce.shipping_free') }} {{ __('commerce.delivery_estimate') }}</p>
             <ul class="footer-commerce-links">@foreach(['paiement', 'livraison'] as $page)<li><a href="{{ route('information', ['locale' => app()->getLocale(), 'page' => $page]) }}">{{ __('pages.entries.'.$page.'.title') }} <span aria-hidden="true">→</span></a></li>@endforeach</ul>
         </section>
     </div>
-    <div class="shell home-footer-bottom"><span>© {{ date('Y') }} HOMYA</span><span>{{ __(app(\App\Services\Commerce\CheckoutReadiness::class)->ready() ? 'commerce.stock_checked' : 'catalogue.preview_notice') }}</span></div>
+    <div class="shell home-footer-bottom"><span>© {{ date('Y') }} HOMYA</span><span>{{ __('home.footer_intro') }}</span></div>
 </footer>

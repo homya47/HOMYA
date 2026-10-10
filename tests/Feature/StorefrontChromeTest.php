@@ -17,6 +17,8 @@ class StorefrontChromeTest extends TestCase
     {
         parent::setUp();
         $this->withoutVite();
+        // Internal footer destinations are tested separately from configured contact links.
+        config(['contact.phone' => null, 'contact.email' => null]);
         config(['catalogue.source' => 'files']);
         DB::shouldReceive('connection')->never();
         DB::shouldReceive('connectUsing')->never();
@@ -42,15 +44,16 @@ class StorefrontChromeTest extends TestCase
 
     public function test_service_navigation_has_localized_destinations_and_no_invented_basket_counter(): void
     {
+        config(['contact.email' => 'support@example.test']);
         foreach (['fr', 'en', 'de'] as $locale) {
             $response = $this->get('/'.$locale.'/contact')->assertOk()
                 ->assertDontSee('chrome.', false)->assertDontSee('damdam', false);
             $xpath = $this->xpath($response->getContent());
             $contact = $xpath->query('//a[@class="utility-contact"]')->item(0);
             $this->assertNotNull($contact);
-            $this->assertSame('/'.$locale.'/contact', $this->localPath($contact->getAttribute('href'), $locale));
-            $this->assertSame(__('chrome.contact', [], $locale), trim($contact->textContent));
-            foreach (['utility-navigation' => ['conseiller', 'provenance', 'suivi'], 'storefront-actions' => ['conseiller', 'suivi', 'panier']] as $class => $pages) {
+            $this->assertSame('mailto:support@example.test', $contact->getAttribute('href'));
+            $this->assertSame('support@example.test', trim($contact->textContent));
+            foreach (['utility-navigation' => ['suivi'], 'storefront-actions' => ['conseiller', 'suivi', 'panier']] as $class => $pages) {
                 $nav = $xpath->query('//nav[@class="'.$class.'"]')->item(0);
                 $this->assertNotNull($nav);
                 $this->assertNotEmpty($nav->getAttribute('aria-label'));
@@ -66,8 +69,8 @@ class StorefrontChromeTest extends TestCase
                 }
             }
             $services = $xpath->query('//*[@id="primary-navigation"]//li[@class="navigation-service"]/a');
-            $this->assertCount(3, $services);
-            foreach (['conseiller', 'suivi', 'panier'] as $index => $page) {
+            $this->assertCount(2, $services);
+            foreach (['suivi', 'panier'] as $index => $page) {
                 $this->assertSame('/'.$locale.'/'.$page, $this->localPath($services->item($index)->getAttribute('href'), $locale));
                 $this->assertSame(__('pages.entries.'.$page.'.title', [], $locale), trim($services->item($index)->textContent));
             }

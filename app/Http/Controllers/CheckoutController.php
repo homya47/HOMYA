@@ -57,12 +57,14 @@ final class CheckoutController extends CommerceController
             'email' => ['required', 'email:rfc', 'max:254'], 'name' => ['required', 'string', 'max:150'],
             'address' => ['required', 'string', 'max:200'], 'postal_code' => ['required', 'string', 'max:12'],
             'city' => ['required', 'string', 'max:100'], 'country' => ['required', Rule::in(config('commerce.countries'))],
-            'terms' => ['accepted'], 'payment_method' => ['nullable', Rule::in(['card', 'bank_transfer', 'deferred'])],
+            'terms' => ['accepted'], 'payment_method' => ['nullable', Rule::in(['bank_transfer', 'deferred'])],
         ]);
         $quote = $cart->quote($request->session());
         if (! hash_equals((string) $request->session()->get('commerce.checkout_key', ''), $data['checkout_key'])
-            || ! hash_equals((string) $request->session()->get('commerce.quote_hash', ''), $data['quote_hash'])
-            || ! hash_equals($this->quoteHash($quote), $data['quote_hash'])) {
+            || ! hash_equals((string) $request->session()->get('commerce.quote_hash', ''), $data['quote_hash'])) {
+            throw ValidationException::withMessages(['cart' => __('commerce.stale_checkout')]);
+        }
+        if (! hash_equals($this->quoteHash($quote), $data['quote_hash'])) {
             throw ValidationException::withMessages(['cart' => __('commerce.changed_offer')]);
         }
         $postal = $data['country'] === 'BE' ? '/\A[0-9]{4}\z/' : '/\A[0-9]{5}\z/';
@@ -70,13 +72,8 @@ final class CheckoutController extends CommerceController
             throw ValidationException::withMessages(['postal_code' => __('commerce.invalid_postal')]);
         }
         $customer = array_intersect_key($data, array_flip(['email', 'name', 'address', 'postal_code', 'city', 'country']));
-        $method = $data['payment_method'] ?? ($readiness->cardReady() ? 'card' : ($readiness->bankReady() ? 'bank_transfer' : 'deferred'));
-        if (! $readiness->cardReady() && $method === 'card' && $readiness->bankReady()) {
-            $method = 'bank_transfer';
-            $customer['payment_fallback'] = 'card_unavailable';
-        }
+        $method = $data['payment_method'] ?? ($readiness->bankReady() ? 'bank_transfer' : 'deferred');
         abort_if($method === 'bank_transfer' && ! $readiness->bankReady(), 503);
-        abort_if($method === 'card' && ! $readiness->cardReady(), 503);
         abort_if($method === 'deferred' && ! $readiness->deferredReady(), 503);
         $customer['payment_method'] = $method;
         $customer['terms_hash'] = app(OrderTerms::class)->hash();
@@ -115,52 +112,6 @@ final class CheckoutController extends CommerceController
             'cardReady' => app(CheckoutReadiness::class)->cardReady(), 'deadline' => app(BankTransfer::class)->deadline($order)->setTimezone('Europe/Paris')]);
     }
 
-    public function cardPreview(string $locale)
-    {
-        return view('commerce.card-payment', ['locale' => $locale, 'order' => null, 'items' => [], 'cardReady' => false]);
-    }
-
-    public function card(Request $request, OrderStore $orders, CheckoutReadiness $readiness, string $locale, string $id)
-    {
-        $owner = $this->ownerHash($request, false);
-        abort_if($owner === '', 404);
-        $order = $orders->owned($id, $owner);
-        if (! in_array($order->status, ['pending_payment', 'pending_payment_details'], true)) {
-            return redirect()->route('order.show', compact('locale', 'id'));
-        }
-
-        return view('commerce.card-payment', compact('order', 'locale') + [
-            'items' => $orders->items($id),
-            'cardReady' => false,
-        ]);
-    }
-
-    public function cardFallback(Request $request, OrderStore $orders, CheckoutReadiness $readiness, string $locale, string $id)
-    {
-        $owner = $this->ownerHash($request, false);
-        abort_if($owner === '', 404);
-        $order = $orders->owned($id, $owner);
-        // Only the failure signal is needed. Never accept card or banking fields from this request.
-        abort_if($request->except('_token') !== [], 422);
-        if ($order->status === 'paid') {
-            return response()->json(['url' => route('order.show', compact('locale', 'id'))]);
-        }
-        if ($order->status !== 'pending_bank_transfer') {
-            abort_unless($readiness->bankReady(), 503);
-            if ($order->status === 'pending_payment_details') {
-                $order = $orders->activateDeferredPayment($id);
-            }
-            abort_unless($order->status === 'pending_payment', 409);
-            try {
-                app(BankTransfer::class)->switch($order, $orders, 'card_unavailable');
-            } catch (Throwable) {
-                // The private bank page withholds the RIB until card closure can be verified.
-            }
-        }
-
-        return response()->json(['url' => route('order.bank', compact('locale', 'id'))]);
-    }
-
     public function commercialDocument(Request $request, OrderStore $orders, string $locale, string $id, string $document)
     {
         abort_unless(config('dashboard.enabled'), 404);
@@ -176,7 +127,7 @@ final class CheckoutController extends CommerceController
 
     public function retry(Request $request, OrderStore $orders, CheckoutReadiness $readiness, string $locale, string $id)
     {
-        abort_unless($readiness->cardReady() || $readiness->bankReady(), 503);
+        abort_unless($readiness->bankReady(), 503);
         $owner = $this->ownerHash($request, false);
         abort_if($owner === '', 404);
         $order = $orders->owned($id, $owner);

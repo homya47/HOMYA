@@ -8,11 +8,12 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SeoController;
-use App\Http\Controllers\MerchantFeedController;
 use App\Http\Controllers\InformationController;
+use App\Http\Controllers\MerchantFeedController;
+use App\Http\Controllers\OrderTrackingController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\ReturnController;
+use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SupportController;
 use App\Http\Middleware\AdminBoundary;
 use App\Http\Middleware\CommerceBoundary;
@@ -70,6 +71,8 @@ Route::get('/sitemaps/{locale}/products-{chunk}.xml', [SeoController::class, 'pr
 Route::get('/google/merchant/{locale}.xml', MerchantFeedController::class)->whereIn('locale', config('homya.locales'))->name('merchant.feed');
 
 Route::middleware(CommerceBoundary::class)->group(function () {
+    Route::get('/{locale}/suivi', [OrderTrackingController::class, 'show'])->whereIn('locale', config('homya.locales'))->name('order.tracking');
+    Route::post('/{locale}/suivi', [OrderTrackingController::class, 'lookup'])->whereIn('locale', config('homya.locales'))->middleware('throttle:10,1')->block()->name('order.tracking.lookup');
     Route::get('/{locale}/retours/declaration', [ReturnController::class, 'create'])->whereIn('locale', config('homya.locales'))->block()->name('returns.create');
     Route::post('/{locale}/retours/verifier', [ReturnController::class, 'review'])->whereIn('locale', config('homya.locales'))->middleware('throttle:return-review')->block()->name('returns.review');
     Route::post('/{locale}/retours/confirmer', [ReturnController::class, 'store'])->whereIn('locale', config('homya.locales'))->middleware('throttle:return-submit')->block()->name('returns.store');
@@ -81,9 +84,6 @@ Route::middleware(CommerceBoundary::class)->group(function () {
     Route::patch('/{locale}/panier/{slug}', [CartController::class, 'update'])->whereIn('locale', config('homya.locales'))->where('slug', '[a-z0-9][a-z0-9-]{0,220}(?:~v[1-9][0-9]{0,2})?')->block()->name('cart.update');
     Route::delete('/{locale}/panier/{slug}', [CartController::class, 'remove'])->whereIn('locale', config('homya.locales'))->where('slug', '[a-z0-9][a-z0-9-]{0,220}(?:~v[1-9][0-9]{0,2})?')->block()->name('cart.remove');
     Route::get('/{locale}/commande', [CheckoutController::class, 'show'])->whereIn('locale', config('homya.locales'))->block()->name('checkout.show');
-    Route::get('/{locale}/paiement/carte', [CheckoutController::class, 'cardPreview'])->whereIn('locale', config('homya.locales'))->name('checkout.card-preview');
-    Route::get('/{locale}/commande/{id}/carte', [CheckoutController::class, 'card'])->whereIn('locale', config('homya.locales'))->whereUuid('id')->block()->name('order.card');
-    Route::post('/{locale}/commande/{id}/carte/virement', [CheckoutController::class, 'cardFallback'])->whereIn('locale', config('homya.locales'))->whereUuid('id')->middleware('throttle:10,1')->block()->name('order.card-fallback');
     Route::post('/{locale}/commande', [CheckoutController::class, 'store'])->whereIn('locale', config('homya.locales'))->middleware('throttle:10,1')->block()->name('checkout.store');
     Route::get('/{locale}/commande/{id}/virement', [CheckoutController::class, 'bank'])->whereIn('locale', config('homya.locales'))->whereUuid('id')->block()->name('order.bank');
     Route::post('/{locale}/commande/{id}/virement', [CheckoutController::class, 'chooseBank'])->whereIn('locale', config('homya.locales'))->whereUuid('id')->middleware('throttle:10,1')->block()->name('order.choose-bank');

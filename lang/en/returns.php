@@ -13,7 +13,7 @@ return [
     'destination_label' => 'Destination',
     'destination' => 'Morigny-Champigny, France',
     'overview_notice' => 'Notify withdrawal within 14 days, then return the goods within 14 days of notification, unless HOMYA arranges collection. Defective goods are covered separately by statutory guarantees.',
-    'logistics_notice' => 'Your declaration is separate from transport arrangements. No prepaid label or collection booking is issued automatically at present. HOMYA covers the return; for parcels, retain proof of posting and receipts for costs advanced. For bulky goods, describe access constraints to arrange collection. A collection request is not a confirmed appointment.',
+    'logistics_notice' => 'Contact HOMYA to arrange your free return transport. For parcels, keep dispatch evidence. For bulky items, share access details to arrange collection. Your declaration is recorded independently of the transport appointment.',
     'sources' => 'View official references',
     'step' => 'Step :step of 2',
     'review' => 'Review my declaration',
@@ -63,7 +63,7 @@ return [
             'preparation' => [
                 'title' => 'Return transport and follow-up',
                 'paragraphs' => [
-                    'A return carrier and prepaid label service are not yet configured. The form does not confirm a collection appointment or issue a shipping label. The declaration is recorded independently of transport arrangements.',
+                    'Contact HOMYA to arrange your free return transport. For parcels, keep dispatch evidence. For bulky items, share access details to arrange collection. Your declaration is recorded independently of the transport appointment.',
                     'HOMYA covers return costs under the published commitment. The registered office accepts parcels and bulky goods. Refunds follow the legal deadlines described above; this acknowledgement is not evidence of a completed refund.',
                 ],
                 'items' => [

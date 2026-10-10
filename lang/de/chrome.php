@@ -10,6 +10,7 @@ return [
         'conseiller' => 'Das passende Gerät finden',
         'provenance' => 'Katalog & FAQ',
         'suivi' => 'Meine Bestellung verfolgen',
+        'phone' => 'HOMYA Telefonnummer',
     ],
     'services' => [
         'conseiller' => 'Beratung',
@@ -20,9 +21,8 @@ return [
     'help_title' => 'Hilfe & Kontakt',
     'legal_title' => 'Rechtliche Informationen',
     'commerce_title' => 'Zahlung & Lieferung',
-    'payment_planned' => 'Geplante Zahlungsmethoden',
-    'card' => 'Kredit- und Debitkarte',
-    'transfer' => 'Banküberweisung',
+    'payment_planned' => 'Zahlung & Lieferung',
+    'instant_transfer' => 'Echtzeit-Überweisung',
     'commerce_detail' => 'Kostenlose Lieferung in Frankreich, Belgien und Deutschland in 3 bis 7 Tagen durch unseren eigenen Transportdienst. Zahlungsbedingungen werden vor der Öffnung der Bestellungen angegeben.',
     'discoveries_title' => 'Im Katalog entdecken',
     'categories' => [

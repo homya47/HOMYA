@@ -19,7 +19,7 @@
     @if($seo['canonical'])<meta property="og:url" content="{{ $seo['canonical'] }}">@endif
     @if($seo['image'])<meta property="og:image" content="{{ $seo['image'] }}">@endif
     @if(app(\App\Services\Seo::class)->onPublicOrigin(request()) && config('seo.verification'))<meta name="google-site-verification" content="{{ config('seo.verification') }}">@endif
-    @if($seo['json'])<script type="application/ld+json">{!! $seo['json'] !!}</script>@endif
+    @if($seo['json'])<script type="application/ld+json" nonce="{{ request()->attributes->get('security.csp_nonce') }}">{!! $seo['json'] !!}</script>@endif
     <link rel="icon" href="{{ asset('favicon.ico') }}?v=homya1" sizes="16x16 32x32 48x48">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('branding/favicon-32-v1.png') }}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('branding/favicon-96-v1.png') }}">
@@ -32,9 +32,8 @@
     <a class="skip-link" href="#main">{{ __('home.skip') }}</a>
     <div class="home-header-wrap">
     <div class="utility-bar"><div class="shell">
-        <a class="utility-contact" href="{{ route('information', ['locale' => app()->getLocale(), 'page' => 'contact']) }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 6 9 7 9-7" stroke="currentColor" stroke-width="1.7"/></svg>{{ __('chrome.contact') }}</a>
-        <nav class="utility-navigation" aria-label="{{ __('chrome.utility_navigation') }}"><ul>@foreach(['conseiller', 'provenance', 'suivi'] as $page)<li><a href="{{ route('information', ['locale' => app()->getLocale(), 'page' => $page]) }}">{{ __('chrome.utility.'.$page) }}</a></li>@endforeach
-@if(config('dashboard.enabled'))<li><a href="{{ route('support.form', ['locale' => app()->getLocale()]) }}">{{ __('support.title') }}</a></li>@endif</ul></nav>
+        @if($contactEmail = app(\App\Services\ContactChannels::class)->email())<a class="utility-contact" href="mailto:{{ $contactEmail }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 6 9 7 9-7" stroke="currentColor" stroke-width="1.7"/></svg>{{ $contactEmail }}</a>@endif
+        <nav class="utility-navigation" aria-label="{{ __('chrome.utility_navigation') }}"><ul><li><a href="{{ route('order.tracking', ['locale' => app()->getLocale()]) }}">{{ __('chrome.utility.suivi') }}</a></li>@if(($phone = app(\App\Services\ContactChannels::class)->phone()) && ($phoneLinks = app(\App\Services\ContactChannels::class)->links()))<li><a class="utility-phone" href="{{ $phoneLinks['whatsapp'] }}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" aria-label="{{ __('contact.chat_label') }}: {{ $phone }}">{{ $phone }}</a></li>@endif</ul></nav>
     </div></div>
     <header class="site-header shell">
         <a class="wordmark" href="{{ route('home', ['locale' => app()->getLocale()]) }}" aria-label="HOMYA">
@@ -75,7 +74,7 @@
                 <li><a href="{{ route('catalogue', ['locale' => app()->getLocale(), 'universe' => $slug]) }}" @if(request()->routeIs('catalogue') && request('universe') === $slug) aria-current="page" @endif>{{ $category['name'] }}</a></li>
             @endforeach
             <li><a href="{{ route('information', ['locale' => app()->getLocale(), 'page' => 'provenance']) }}" @if(request()->routeIs('information') && request()->route('page') === 'provenance') aria-current="page" @endif>{{ __('pages.help') }}</a></li>
-            @foreach(['conseiller', 'suivi', 'panier'] as $page)<li class="navigation-service"><a href="{{ $page === 'panier' ? route('cart.show', ['locale' => app()->getLocale()]) : route('information', ['locale' => app()->getLocale(), 'page' => $page]) }}">{{ __('pages.entries.'.$page.'.title') }}</a></li>@endforeach
+            @foreach(['suivi', 'panier'] as $page)<li class="navigation-service"><a href="{{ $page === 'panier' ? route('cart.show', ['locale' => app()->getLocale()]) : route('information', ['locale' => app()->getLocale(), 'page' => $page]) }}">{{ __('pages.entries.'.$page.'.title') }}</a></li>@endforeach
         </ul>
     </nav>
     </div>

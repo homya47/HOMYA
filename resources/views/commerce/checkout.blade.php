@@ -4,8 +4,8 @@
         <h1>{{ __('commerce.checkout') }}</h1>
         <x-checkout-steps current="checkout" :locale="$locale" />
         <x-commerce-errors />
-        @if(session('commerce_message'))<p class="commerce-success" role="status" tabindex="-1">{{ session('commerce_message') }}</p>@endif
-        <p class="checkout-intro">{{ __(!$cardReady && !$bankReady ? 'commerce.deferred_notice' : 'commerce.checkout_intro') }}</p>
+        @if(session('commerce_message'))<p class="commerce-success" role="status">{{ session('commerce_message') }}</p>@endif
+        <p class="checkout-intro">{{ __(!$bankReady ? 'commerce.deferred_notice' : 'commerce.checkout_intro') }}</p>
         <div class="commerce-grid checkout-grid">
             <div class="checkout-main">
             <form id="checkout-form" class="checkout-form" method="post" action="{{ route('checkout.store', ['locale' => $locale]) }}">@csrf
@@ -38,13 +38,10 @@
                     <p class="checkout-help">{{ __('commerce.shipping_free') }} {{ __('commerce.delivery_estimate') }}</p>
                 </fieldset>
                 <fieldset class="checkout-panel payment-options"><legend><span class="checkout-section-number" aria-hidden="true">3</span> {{ __('commerce.payment_method') }}</legend>
-                    @if($cardReady)<label class="payment-choice"><input type="radio" name="payment_method" value="card" @checked(!$bankReady || old('payment_method', 'card') !== 'bank_transfer') required><span><strong>{{ __('commerce.card_method') }}</strong><small>{{ __('commerce.card_notice') }}</small></span></label>@endif
-                    @if($bankReady)<label class="payment-choice"><input type="radio" name="payment_method" value="bank_transfer" @checked(!$cardReady || old('payment_method') === 'bank_transfer') required><span><strong>{{ __('commerce.bank_method') }}</strong><small>{{ __('commerce.bank_next_step') }}</small></span></label><p class="checkout-help">{{ __('commerce.bank_deadline_notice') }}</p>@endif
-                    @if(!$cardReady && $bankReady)<p class="checkout-help">{{ __('commerce.card_fallback') }}</p>@endif
-                    @if(!$cardReady && !$bankReady)<input type="hidden" name="payment_method" value="deferred"><strong>{{ __('commerce.status.pending_payment_details') }}</strong><p class="checkout-help">{{ __('commerce.deferred_notice') }}</p><p class="checkout-help">{{ __('commerce.deferred_reservation_notice') }}</p>@endif
+                    @if($bankReady)<label class="payment-choice"><input type="radio" name="payment_method" value="bank_transfer" checked required><span><strong>{{ __('commerce.bank_method') }}</strong><small>{{ __('commerce.bank_next_step') }}</small></span></label><p class="checkout-help">{{ __('commerce.bank_deadline_notice') }}</p>@endif
+                    @if(!$bankReady)<input type="hidden" name="payment_method" value="deferred"><strong>{{ __('commerce.status.pending_payment_details') }}</strong><p class="checkout-help">{{ __('commerce.deferred_notice') }}</p><p class="checkout-help">{{ __('commerce.deferred_reservation_notice') }}</p>@endif
                     @error('payment_method')<p class="checkout-field-error" role="alert">{{ $message }}</p>@enderror
                 </fieldset>
-                <p class="checkout-help"><a href="{{ route('checkout.card-preview', ['locale' => $locale]) }}">{{ __('commerce.card_form.preview_link') }}</a></p>
                 <div class="checkout-panel checkout-consent">
                     <label class="terms-checkbox"><input type="checkbox" name="terms" value="1" required @if($errors->has('terms')) aria-invalid="true" aria-describedby="checkout-terms-error" @endif><span>{{ __('commerce.accept_terms') }} <a href="{{ route('information', ['locale' => $locale, 'page' => 'cgv']) }}">{{ __('commerce.terms') }}</a>.</span></label>
                     @error('terms')<p id="checkout-terms-error" class="checkout-field-error">{{ $message }}</p>@enderror
@@ -61,9 +58,8 @@
                 </li>@endforeach</ul>
                 <dl class="checkout-totals"><div><dt>{{ __('commerce.subtotal') }}</dt><dd>{{ \App\Services\Catalogue::money($quote['total_cents'], $locale) }}</dd></div><div><dt>{{ __('commerce.delivery') }}</dt><dd>{{ __('commerce.free_delivery') }}</dd></div><div class="checkout-total"><dt>{{ __('commerce.total_tax_included') }}</dt><dd>{{ \App\Services\Catalogue::money($quote['total_cents'], $locale) }}</dd></div></dl>
                 <div class="checkout-next-step"><strong>{{ __('commerce.next_step') }}</strong>
-                    @if($cardReady)<p>{{ __('commerce.card_next_step') }}</p>@endif
                     @if($bankReady)<p>{{ __('commerce.bank_next_step') }}</p>@endif
-                    @if(!$cardReady && !$bankReady)<p>{{ __('commerce.deferred_notice') }}</p>@endif
+                    @if(!$bankReady)<p>{{ __('commerce.deferred_notice') }}</p>@endif
                 </div>
                 <button class="button-primary checkout-submit" type="submit" form="checkout-form" data-busy-label="{{ __('commerce.validating') }}"><span data-submit-label>{{ __('commerce.confirm_order_action') }}</span><strong>{{ \App\Services\Catalogue::money($quote['total_cents'], $locale) }}</strong></button>
                 <p class="checkout-help">{{ __('commerce.validation_help') }}</p>

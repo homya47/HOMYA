@@ -1,7 +1,7 @@
 <?php
 
 return [
-    // Public HOMYA number in international format; leave empty until confirmed.
-    'phone' => env('HOMYA_CONTACT_PHONE'),
-    'email' => env('HOMYA_CONTACT_EMAIL'),
+    // Public details supplied by HOMYA on 2026-10-10; environment overrides remain available.
+    'phone' => env('HOMYA_CONTACT_PHONE', '+33756894951'),
+    'email' => env('HOMYA_CONTACT_EMAIL', 'support@homya.eu'),
 ];

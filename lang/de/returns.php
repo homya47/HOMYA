@@ -13,7 +13,7 @@ return [
     'destination_label' => 'Ziel',
     'destination' => 'Morigny-Champigny, Frankreich',
     'overview_notice' => 'Erklären Sie den Widerruf innerhalb von 14 Tagen und senden Sie die Ware innerhalb von 14 Tagen nach Erklärung zurück, sofern HOMYA keine Abholung anbietet. Für mangelhafte Waren gelten gesonderte gesetzliche Rechte.',
-    'logistics_notice' => 'Ihre Erklärung ist unabhängig von der Transportorganisation. Derzeit werden weder vorausbezahlte Etiketten noch Abholtermine automatisch erstellt. HOMYA übernimmt die Rücksendung; bewahren Sie bei Paketen Versandbelege und Belege über verauslagte Kosten auf. Geben Sie bei sperrigen Waren die Zugangsbedingungen für eine Abholung an. Eine Abholanfrage ist kein bestätigter Termin.',
+    'logistics_notice' => 'Kontaktieren Sie HOMYA, um den kostenlosen Rücktransport zu organisieren. Bewahren Sie bei Paketen Versandbelege auf. Nennen Sie bei sperrigen Artikeln die Zugangsbedingungen zur Vereinbarung einer Abholung. Ihre Erklärung wird unabhängig vom Transporttermin erfasst.',
     'sources' => 'Offizielle Quellen ansehen',
     'step' => 'Schritt :step von 2',
     'review' => 'Erklärung überprüfen',
@@ -63,7 +63,7 @@ return [
             'preparation' => [
                 'title' => 'Rücktransport und Bearbeitung',
                 'paragraphs' => [
-                    'Ein Rücksendetransporteur und ein Dienst für vorausbezahlte Etiketten sind noch nicht eingerichtet. Das Formular bestätigt keinen Abholtermin und erstellt kein Versandetikett. Die Erklärung wird unabhängig von der Transportorganisation gespeichert.',
+                    'Kontaktieren Sie HOMYA, um den kostenlosen Rücktransport zu organisieren. Bewahren Sie bei Paketen Versandbelege auf. Nennen Sie bei sperrigen Artikeln die Zugangsbedingungen zur Vereinbarung einer Abholung. Ihre Erklärung wird unabhängig vom Transporttermin erfasst.',
                     'HOMYA übernimmt die Rücksendekosten gemäß der veröffentlichten Zusage. Der Sitz empfängt Pakete und sperrige Waren. Erstattungen erfolgen nach den oben erläuterten gesetzlichen Fristen; die Bestätigung belegt keine abgeschlossene Erstattung.',
                 ],
                 'items' => [

@@ -76,7 +76,7 @@ final class OrderStore
             }
             $created = now();
             $id = (string) Str::uuid();
-            $bank = ($customer['payment_method'] ?? 'card') === 'bank_transfer';
+            $bank = ($customer['payment_method'] ?? 'deferred') === 'bank_transfer';
             $deferred = ($customer['payment_method'] ?? 'card') === 'deferred';
             if ($deferred && ! app(CheckoutReadiness::class)->deferredReady()) {
                 $this->reject();
@@ -87,9 +87,6 @@ final class OrderStore
                     $this->reject();
                 }
                 $customer['bank_transfer'] = ['details' => $details, 'deadline' => $created->copy()->addHours(BankTransfer::RESERVATION_HOURS)->toIso8601String()];
-                if (($customer['payment_fallback'] ?? null) === 'card_unavailable') {
-                    $customer['bank_transfer']['source'] = 'card_unavailable';
-                }
             }
             $db->table('commerce_orders')->insert([
                 'id' => $id, 'owner_hash' => $ownerHash, 'checkout_key' => $key, 'request_hash' => $hash,
@@ -116,7 +113,7 @@ final class OrderStore
     public function activateDeferredPayment(string $id): object
     {
         $readiness = app(CheckoutReadiness::class);
-        if (! $readiness->cardReady() && ! $readiness->bankReady()) {
+        if (! $readiness->bankReady()) {
             throw new RuntimeException('Payment instructions unavailable.');
         }
         $this->expireBankTransfers();
@@ -155,9 +152,6 @@ final class OrderStore
                 throw new RuntimeException('Legacy card reconciliation required.');
             }
             $customer['bank_transfer'] = ['details' => $details, 'deadline' => app(BankTransfer::class)->deadline($order)->toIso8601String()];
-            if ($source === 'card_unavailable') {
-                $customer['bank_transfer']['source'] = $source;
-            }
             $db->table('commerce_orders')->where('id', $id)->update([
                 'status' => 'pending_bank_transfer', 'checkout_url' => null,
                 'customer_encrypted' => Crypt::encryptString(json_encode($customer, JSON_THROW_ON_ERROR)), 'updated_at' => now(),
@@ -259,6 +253,6 @@ final class OrderStore
 
     private function reject(): never
     {
-        throw ValidationException::withMessages(['cart' => __('commerce.changed_offer')]);
+        throw ValidationException::withMessages(['cart' => __('commerce.inventory_changed')]);
     }
 }

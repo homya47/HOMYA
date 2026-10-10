@@ -74,9 +74,5 @@
             </section>
 
         <section class="shell home-browse-banner" aria-labelledby="browse-heading"><div><h2 id="browse-heading">{{ __('home.browse_heading') }}</h2><p>{{ __('home.browse_intro') }}</p></div><a class="home-button home-button-yellow" href="{{ route('catalogue', ['locale' => $locale]) }}">{{ __('home.browse_action') }} <span aria-hidden="true">→</span></a></section>
-        <aside class="shell home-status" aria-labelledby="store-status">
-            <h2 id="store-status">{{ $catalogueReady ? __('catalogue.preview_title') : __('home.status') }}</h2>
-            <p>{{ $catalogueReady ? __(app(\App\Services\Commerce\CheckoutReadiness::class)->ready() ? (app(\App\Services\Commerce\CheckoutReadiness::class)->cardReady() || app(\App\Services\Commerce\CheckoutReadiness::class)->bankReady() ? 'commerce.stock_checked' : 'commerce.deferred_notice') : 'catalogue.preview_notice') : ($catalogueUnavailable ? __('home.catalogue_unavailable') : __('home.status_detail')) }}</p>
-        </aside>
     </main>
 </x-layout>

@@ -1,3 +1,6 @@
+# Directory listings must remain disabled even without content negotiation.
+Options -Indexes
+
 # Compress text assets when the selected hosting environment provides these modules.
 <IfModule mod_filter.c>
     <IfModule mod_deflate.c>
@@ -18,6 +21,14 @@
     </IfModule>
 
     RewriteEngine On
+
+    # Refuse hidden files, source/configuration files and executable uploads.
+    # ACME challenge tokens are the only hidden-directory exception.
+    RewriteRule "(^|/)\.(?!well-known/acme-challenge/)" - [F,L]
+    RewriteRule "^(?:app|bootstrap|config|database|vendor|node_modules|scripts|tests|output|docs)(?:/|$)" - [F,L,NC]
+    RewriteRule "^(?:composer\.(?:json|lock)|package(?:-lock)?\.json|artisan|phpunit\.xml|vite\.config\.[^/]+)$" - [F,L,NC]
+    RewriteRule "\.(?:sql|log|env|ini|bak|backup|orig|sh|py|pl|cgi|phar|phtml)(?:/|$)" - [F,L,NC]
+    RewriteRule "^(?!index\.php$).*\.php[0-9]*(?:/|$)" - [F,L,NC]
 
     # Use the environment-aware robots response, before the existing-file check.
     RewriteRule ^robots\.txt$ index.php [L]

@@ -10,6 +10,13 @@ use Tests\TestCase;
 
 class InformationPagesTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Explicit unconfigured-contact fixture, independent of public HOMYA defaults.
+        config(['contact.phone' => null, 'contact.email' => null]);
+    }
+
     public function test_information_is_localized_without_fake_forms_or_source_identity(): void
     {
         DB::shouldReceive('connection')->never();
@@ -23,7 +30,7 @@ class InformationPagesTest extends TestCase
                 $xpath = new DOMXPath($document);
                 $this->assertSame(1, $xpath->query('//h1')->length);
                 $this->assertSame($locale, $document->documentElement->getAttribute('lang'));
-                $this->assertSame(0, $xpath->query('//form[not(@role="search")]')->length);
+                $this->assertSame($page === 'suivi' ? 1 : 0, $xpath->query('//form[not(@role="search")]')->length);
                 foreach ($xpath->query('//nav[contains(@class,"languages")]/a') as $link) {
                     $this->assertStringEndsWith('/'.$page, $link->getAttribute('href'));
                 }
@@ -36,7 +43,7 @@ class InformationPagesTest extends TestCase
         config(['catalogue.archive_path' => sys_get_temp_dir().'/homya-missing-'.uniqid().'.json']);
         foreach (['fr', 'en', 'de'] as $locale) {
             $this->get('/'.$locale.'/contact')->assertOk()->assertSee('disabled', false)
-                ->assertSee(__('pages.pending', [], $locale));
+                ->assertDontSee(__('pages.pending', [], $locale));
             $this->get('/'.$locale.'/unknown-page')->assertNotFound();
         }
         $this->get('/es/contact')->assertNotFound();

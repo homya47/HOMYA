@@ -30,7 +30,7 @@ final class CommerceBoundary
         }
         $response->headers->set('Cache-Control', 'no-store, private');
         $response->headers->set('Referrer-Policy', 'no-referrer');
-        if ($request->routeIs('returns.*')) {
+        if ($request->routeIs('returns.*', 'order.tracking*')) {
             $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
         }
 

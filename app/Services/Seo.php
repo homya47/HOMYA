@@ -84,7 +84,7 @@ final class Seo
         if ($route === 'information') {
             $parameters['page'] = $request->route('page');
             $public = $public && ! ($context['pending'] ?? true)
-                && ! in_array($parameters['page'], ['suivi', 'avis'], true);
+                && ! in_array($parameters['page'], ['suivi'], true);
         }
         $canonical = $public && ! $filtered ? $this->url($route, $parameters) : null;
         $indexable = $canonical !== null && $this->onPublicOrigin($request);

@@ -32,7 +32,7 @@
                         @if($line['product'])<x-purchase-information :locale="$locale" :product-name="$line['product']['name']" />@endif
                     </article>@endforeach
                 </section>
-                    @if($checkoutReady && !$bankReady && !app(\App\Services\Commerce\CheckoutReadiness::class)->cardReady())<section class="checkout-panel"><h2>{{ __('commerce.status.pending_payment_details') }}</h2><p>{{ __('commerce.deferred_notice') }}</p></section>@else<x-bank-transfer-guide :locale="$locale" :ready="$bankReady" />@endif
+                    @if($checkoutReady && !$bankReady)<section class="checkout-panel"><h2>{{ __('commerce.status.pending_payment_details') }}</h2><p>{{ __('commerce.deferred_notice') }}</p></section>@else<x-bank-transfer-guide :locale="$locale" :ready="$bankReady" />@endif
                 </div>
                 <aside class="commerce-summary cart-summary" aria-labelledby="cart-summary-heading"><h2 id="cart-summary-heading">{{ __('commerce.summary') }}</h2>
                     @if($quote['valid'])<dl class="checkout-totals"><div><dt>{{ __('commerce.subtotal') }}</dt><dd>{{ \App\Services\Catalogue::money($quote['subtotal_cents'], $locale) }}</dd></div><div><dt>{{ __('commerce.delivery') }}</dt><dd class="cart-free-shipping">{{ __('commerce.free_delivery') }}</dd></div><div class="checkout-total"><dt>{{ __('commerce.total_tax_included') }}</dt><dd>{{ \App\Services\Catalogue::money($quote['total_cents'], $locale) }}</dd></div></dl>@endif

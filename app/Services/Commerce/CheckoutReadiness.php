@@ -6,7 +6,7 @@ final class CheckoutReadiness
 {
     public function ready(): bool
     {
-        return $this->cardReady() || $this->bankReady() || $this->deferredReady();
+        return $this->bankReady() || $this->deferredReady();
     }
 
     public function deferredReady(): bool
@@ -35,7 +35,7 @@ final class CheckoutReadiness
 
     public function cardReady(): bool
     {
-        // Card form retained as a preview; no payment provider is currently configured.
+        // HOMYA accepts bank transfer only; card payment was removed by the owner.
         return false;
     }
 }

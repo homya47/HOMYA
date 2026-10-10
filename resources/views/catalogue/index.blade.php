@@ -5,14 +5,12 @@
             <div class="catalogue-intro-copy page-heading"><p class="eyebrow">HOMYA</p><h1>{{ $catalogueIntro['title'] }}</h1><p>{{ $catalogueIntro['description'] }}</p><p class="catalogue-total">{{ trans_choice($catalogueIntro['universe'] ? 'catalogue.department_count' : 'catalogue.total_count', $catalogueIntro['count'], ['count' => $catalogueIntro['count']]) }}</p></div>
             @if($catalogueIntro['image'])<img class="catalogue-intro-image" src="{{ $catalogueIntro['image']['local_url'] }}" width="{{ $catalogueIntro['image']['width'] }}" height="{{ $catalogueIntro['image']['height'] }}" alt="" decoding="async">@endif
         </div>
-        <p class="catalogue-notice">{{ __(app(\App\Services\Commerce\CheckoutReadiness::class)->ready() ? (app(\App\Services\Commerce\CheckoutReadiness::class)->cardReady() || app(\App\Services\Commerce\CheckoutReadiness::class)->bankReady() ? 'commerce.stock_checked' : 'commerce.deferred_notice') : 'catalogue.preview_notice') }}</p>
         @if($browseCategories->isNotEmpty())
             <nav class="category-navigation" aria-label="{{ __('catalogue.browse_categories') }}">
                 <div class="category-navigation-heading"><h2>{{ __('catalogue.browse_categories') }}</h2><a href="#filter-category" data-open-category-filter>{{ __('catalogue.all_categories') }}</a></div>
                 <ul>@foreach($browseCategories as $category)<li><a class="category-entry" href="{{ $category['url'] }}" @if(($filters['category'] ?? '') === $category['slug']) aria-current="page" @endif><span>{{ $category['name'] }}</span><small>{{ trans_choice('catalogue.category_count', $category['count'], ['count' => $category['count']]) }}</small><span aria-hidden="true">→</span></a></li>@endforeach</ul>
             </nav>
         @endif
-        @if (!($meta['complete'] ?? false))<p class="catalogue-notice">{{ __('catalogue.incomplete') }}</p>@endif
         @if ($invalid)<div id="filter-errors" class="form-error" role="alert" tabindex="-1"><p>{{ __('catalogue.invalid_filters') }}</p><a href="{{ route('catalogue', ['locale' => $locale]) }}">{{ __('catalogue.reset') }}</a></div>@endif
         <div class="catalogue-layout">
             <details class="filter-panel" data-filter-panel open>

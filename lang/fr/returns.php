@@ -13,7 +13,7 @@ return [
     'destination_label' => 'Destination',
     'destination' => 'Morigny-Champigny, France',
     'overview_notice' => 'Notifiez votre décision sous 14 jours, puis renvoyez le bien sous 14 jours après notification, sauf reprise organisée par HOMYA. Un produit défectueux relève des garanties légales.',
-    'logistics_notice' => 'Votre déclaration est indépendante de l’organisation du transport. Aucune étiquette prépayée ni réservation d’enlèvement n’est émise automatiquement pour le moment. HOMYA prend en charge le retour ; pour un colis, conservez la preuve d’envoi et les justificatifs des frais avancés. Pour un article volumineux, précisez les contraintes d’accès afin de convenir d’une collecte. Une demande d’enlèvement ne constitue pas un rendez-vous confirmé.',
+    'logistics_notice' => 'Contactez HOMYA pour organiser le transport gratuit de votre retour. Pour un colis, conservez les justificatifs d’envoi. Pour un article volumineux, indiquez les contraintes d’accès afin de convenir d’une collecte. Votre déclaration est enregistrée indépendamment du rendez-vous de transport.',
     'sources' => 'Consulter les références officielles',
     'step' => 'Étape :step sur 2',
     'review' => 'Vérifier ma déclaration',
@@ -63,7 +63,7 @@ return [
             'preparation' => [
                 'title' => 'Transport et suivi de votre retour',
                 'paragraphs' => [
-                    'Le transporteur et le service d’étiquettes prépayées ne sont pas encore configurés. Aucun rendez-vous d’enlèvement ni étiquette de transport ne sont confirmés par le formulaire. La déclaration est enregistrée et reste indépendante de cette organisation.',
+                    'Contactez HOMYA pour organiser le transport gratuit de votre retour. Pour un colis, conservez les justificatifs d’envoi. Pour un article volumineux, indiquez les contraintes d’accès afin de convenir d’une collecte. Votre déclaration est enregistrée indépendamment du rendez-vous de transport.',
                     'Les frais de retour sont pris en charge par HOMYA conformément à l’engagement publié. Le siège peut recevoir les colis et articles volumineux. Le remboursement suit les délais légaux de la rubrique « Renvoi et remboursement » ; cet accusé ne constitue pas une preuve de remboursement.',
                 ],
                 'items' => [

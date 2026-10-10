@@ -72,11 +72,11 @@ class ContactButtonsTest extends TestCase
         }
     }
 
-    public function test_unconfigured_site_keeps_contact_in_preparation_without_external_buttons(): void
+    public function test_unconfigured_contact_has_no_external_buttons_or_preparation_notice(): void
     {
         foreach (['fr', 'en', 'de'] as $locale) {
             $this->get('/'.$locale.'/contact')->assertOk()
-                ->assertSee(__('pages.pending', [], $locale))
+                ->assertDontSee(__('pages.pending', [], $locale))
                 ->assertDontSee('wa.me/', false)
                 ->assertDontSee('sms:', false);
         }
