@@ -48,6 +48,15 @@ final class HostedCatalogueReadGuardTest extends TestCase
         HostedCatalogueReadGuard::validateTarget($reader, $this->writer());
     }
 
+    public function test_empty_writer_target_is_rejected(): void
+    {
+        $writer = $this->writer();
+        $writer['database'] = '';
+
+        $this->expectException(RuntimeException::class);
+        HostedCatalogueReadGuard::validateTarget($this->reader(), $writer);
+    }
+
     private function reader(): array
     {
         return ['driver' => 'mariadb', 'url' => null, 'host' => 'localhost', 'port' => '3306',
