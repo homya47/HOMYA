@@ -81,7 +81,8 @@ final class MerchantProducts
             || mb_strlen($product['brand'] ?? '') > 70) {
             $problems[] = 'text_format_invalid';
         }
-        if (empty($product['images'])) {
+        $images = $this->merchantImages($product);
+        if ($images === []) {
             $problems[] = 'image_missing';
         }
         if (! is_int($product['price_cents'] ?? null) || $product['price_cents'] <= 0
@@ -275,7 +276,7 @@ final class MerchantProducts
                 }
             }
             $this->attribute($xml, 'link', $this->seo->url('product', ['locale' => $locale, 'slug' => $product['slug']] + (isset($product['variant_id']) ? ['variant' => $product['variant_id']] : [])));
-            foreach ($product['images'] as $index => $image) {
+            foreach ($this->merchantImages($product) as $index => $image) {
                 if ($index > 10) {
                     break;
                 }
@@ -302,6 +303,21 @@ final class MerchantProducts
         $xml->endDocument();
 
         return $xml->outputMemory();
+    }
+
+    /** Keep undersized display photos out of product feeds; never upscale them. */
+    private function merchantImages(array $product): array
+    {
+        return array_values(array_filter($product['images'] ?? [], static function ($image): bool {
+            if (! is_array($image) || ! preg_match('~\A/media/catalogue/[a-f0-9]{24}\.(?:jpg|png|webp|gif)\z~', $image['local_url'] ?? '')) {
+                return false;
+            }
+            $width = $image['width'] ?? null;
+            $height = $image['height'] ?? null;
+
+            return is_int($width) && is_int($height) && $width >= 500 && $height >= 500
+                && $width * $height <= 64_000_000;
+        }));
     }
 
     private function attribute(XMLWriter $xml, string $name, string $value): void

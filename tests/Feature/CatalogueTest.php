@@ -134,7 +134,7 @@ class CatalogueTest extends TestCase
         return $path;
     }
 
-    public function test_small_photos_are_omitted_but_valid_description_is_kept_without_source_changes(): void
+    public function test_small_photos_remain_available_and_valid_description_is_kept_without_source_changes(): void
     {
         $smallWidth = $this->imageFixture(499, 600, str_repeat('a', 24).'.png');
         $valid = $this->imageFixture(500, 500, str_repeat('b', 24).'.png');
@@ -144,28 +144,29 @@ class CatalogueTest extends TestCase
         $hashes = array_map(fn ($image) => hash_file('sha256', public_path(ltrim($image['local_url'], '/'))), [$smallWidth, $valid, $smallHeight]);
         foreach (['fr', 'en', 'de'] as $locale) {
             $response = $this->get('/'.$locale.'/produit/test-produit-001')->assertOk()->assertSee($valid['local_url'], false)
-                ->assertDontSee($smallWidth['local_url'], false)->assertDontSee($smallHeight['local_url'], false)
+                ->assertSee($smallWidth['local_url'], false)->assertSee($smallHeight['local_url'], false)
                 ->assertDontSee(__('catalogue.content_unavailable', [], $locale))->assertSee('REF-1')->assertSee('20 cm');
             $xpath = $this->xpath($response->getContent());
             $this->assertSame(1, $xpath->query('//p[@class="product-description"]')->length);
-            $this->assertSame(0, $xpath->query('//button[@data-gallery-src]')->length);
-            $this->assertSame(__('catalogue.image_count', ['current' => 1, 'total' => 1], $locale), $xpath->query('//p[@data-gallery-caption]')->item(0)->textContent);
+            $this->assertSame(3, $xpath->query('//button[@data-gallery-src]')->length);
+            $this->assertSame(__('catalogue.image_count', ['current' => 1, 'total' => 3], $locale), $xpath->query('//p[@data-gallery-caption]')->item(0)->textContent);
             $this->assertStringContainsString('alert(1)', $xpath->query('//meta[@name="description"]')->item(0)->getAttribute('content'));
-            $this->get('/'.$locale.'/catalogue?q=REF-1')->assertOk()->assertDontSee($smallWidth['local_url'], false);
+            $this->get('/'.$locale.'/catalogue?q=REF-1')->assertOk()->assertSee($smallWidth['local_url'], false);
         }
         $this->assertSame($original, File::get($path));
         $this->assertSame($hashes, array_map(fn ($image) => hash_file('sha256', public_path(ltrim($image['local_url'], '/'))), [$smallWidth, $valid, $smallHeight]));
     }
 
-    public function test_fully_hidden_gallery_has_no_controls_or_zero_image_caption_and_can_recover(): void
+    public function test_small_but_valid_gallery_remains_available_without_zero_image_warning(): void
     {
         $image = $this->imageFixture(250, 250, str_repeat('d', 24).'.png');
         $this->productImages([$image]);
         $response = $this->get('/fr/produit/test-produit-001')->assertOk()->assertSee('123,45 €')
-            ->assertSee(__('catalogue.image_missing', [], 'fr'))->assertDontSee($image['local_url'], false);
+            ->assertSee($image['local_url'], false);
         $xpath = $this->xpath($response->getContent());
-        $this->assertSame(0, $xpath->query('//img[@data-product-image]|//button[@data-gallery-src]|//p[@data-gallery-caption]')->length);
-        // A genuine replacement of adequate size restores content without editing source JSON.
+        $this->assertSame(1, $xpath->query('//img[@data-product-image]')->length);
+        $this->assertSame(1, $xpath->query('//span[@data-image-fallback and @hidden]')->length);
+        // Replacing the source with a larger original keeps the same gallery URL available.
         $this->imageFixture(500, 500, str_repeat('d', 24).'.png');
         $this->get('/fr/produit/test-produit-001')->assertOk()->assertSee($image['local_url'], false)
             ->assertSee('Description test')->assertDontSee(__('catalogue.content_unavailable', [], 'fr'));
@@ -182,7 +183,7 @@ class CatalogueTest extends TestCase
             ->assertSee('Test description')->assertDontSee(__('catalogue.content_unavailable', [], 'en'));
     }
 
-    public function test_index_card_uses_a_valid_secondary_photo_when_the_primary_is_too_small(): void
+    public function test_index_card_keeps_the_genuine_primary_photo_even_when_it_is_small(): void
     {
         $small = $this->imageFixture(450, 450, str_repeat('1', 24).'.png');
         $valid = $this->imageFixture(600, 700, str_repeat('2', 24).'.png');
@@ -193,7 +194,7 @@ class CatalogueTest extends TestCase
         File::put($this->archive.'/index.json', json_encode($index));
         foreach (['fr', 'en', 'de'] as $locale) {
             $this->get('/'.$locale.'/catalogue?q=REF-1&min=123.45&max=123.45')->assertOk()
-                ->assertSee($valid['local_url'], false)->assertDontSee($small['local_url'], false);
+                ->assertSee($small['local_url'], false)->assertDontSee($valid['local_url'], false);
         }
         $this->assertSame($original, File::get($path));
     }
@@ -211,9 +212,9 @@ class CatalogueTest extends TestCase
         ]]));
         foreach (['fr', 'en', 'de'] as $locale) {
             $this->get('/'.$locale.'/produit/test-produit-001')->assertOk()->assertSee($replacement['local_url'], false)
-                ->assertDontSee($small['local_url'], false)->assertDontSee('manufacturer.example', false)->assertDontSee('damdam', false)
+                ->assertSee($small['local_url'], false)->assertDontSee('manufacturer.example', false)->assertDontSee('damdam', false)
                 ->assertDontSee(__('catalogue.content_unavailable', [], $locale))->assertSee('REF-1');
-            $this->get('/'.$locale.'/catalogue?q=REF-1&min=123.45&max=123.45')->assertOk()->assertSee($replacement['local_url'], false);
+            $this->get('/'.$locale.'/catalogue?q=REF-1&min=123.45&max=123.45')->assertOk()->assertSee($replacement['local_url'], false)->assertDontSee($small['local_url'], false);
         }
         $this->assertSame($original, File::get($path));
         $this->assertSame($digest, hash_file('sha256', public_path(ltrim($small['local_url'], '/'))));
@@ -230,8 +231,8 @@ class CatalogueTest extends TestCase
             array_replace($base, ['image' => $small]), array_replace($base, ['image' => ['local_url' => '/media/catalogue/'.str_repeat('8', 24).'.png']]),
             array_replace($base, ['image' => ['local_url' => 'https://manufacturer.example/image.png']])] as $entry) {
             File::put($this->archive.'/media-overrides.json', json_encode(['version' => 1, 'products' => ['test-produit-001' => $entry]]));
-            $this->get('/fr/produit/test-produit-001')->assertOk()->assertSee($valid['local_url'], false)->assertDontSee($unrelated['local_url'], false);
-            $this->get('/fr/catalogue?q=REF-1&min=123.45&max=123.45')->assertOk()->assertSee($valid['local_url'], false)->assertDontSee($unrelated['local_url'], false);
+            $this->get('/fr/produit/test-produit-001')->assertOk()->assertSee($small['local_url'], false)->assertSee($valid['local_url'], false)->assertDontSee($unrelated['local_url'], false);
+            $this->get('/fr/catalogue?q=REF-1&min=123.45&max=123.45')->assertOk()->assertSee($small['local_url'], false)->assertDontSee($unrelated['local_url'], false);
         }
         File::put($this->archive.'/media-overrides.json', '{malformed');
         $this->get('/fr/produit/test-produit-001')->assertOk()->assertSee($valid['local_url'], false);

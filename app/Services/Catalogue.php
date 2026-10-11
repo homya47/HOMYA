@@ -146,11 +146,11 @@ class Catalogue
         }
         $path = public_path(ltrim($url, '/'));
         $dimensions = @getimagesize($path);
-        // Prepare for the announced Merchant Center threshold without upscaling.
-        // This technical gate does not certify visual quality or Google approval.
         $extension = pathinfo($path, PATHINFO_EXTENSION);
         $expectedType = ['jpg' => IMAGETYPE_JPEG, 'png' => IMAGETYPE_PNG, 'webp' => IMAGETYPE_WEBP, 'gif' => IMAGETYPE_GIF];
-        if (! $dimensions || $dimensions[0] < 500 || $dimensions[1] < 500
+        // Keep every genuine, decodable source photo available in the storefront.
+        // Merchant Center has a separate stricter image gate in MerchantProducts.
+        if (! $dimensions || $dimensions[0] < 1 || $dimensions[1] < 1
             || $dimensions[0] * $dimensions[1] > 64_000_000 || filesize($path) > 16_000_000
             || ($expectedType[$extension] ?? null) !== $dimensions[2]) {
             return $this->images[$url] = null;
