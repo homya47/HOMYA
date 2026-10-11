@@ -18,6 +18,8 @@ Ce guide prépare l’instance Hostinger `homya.eu` à partir des sources HOMYA 
 
 Publier le code HOMYA depuis une branche basée sur `origin/main`, après tests et revue du diff. Ne pas forcer le push : l’historique local n’a pas de base commune avec `origin/main`. Les ressources Vite doivent être incluses (`public/build/manifest.json` et `public/build/assets/*`) puisque Node n’est pas installé dans le shell SSH Hostinger. Déployer le code avant l’import, puis utiliser exclusivement les commandes protégées ci-dessous.
 
+Le déploiement Git hPanel exécute `composer install --prefer-dist --quiet --no-interaction` avant la publication. Le hook Composer `post-autoload-dump` appelle `scripts/secure_hosting_runtime.php`, qui remet `storage/app/private` et `storage/logs` en `0700` et fait échouer le build si ces dossiers manquent, sont des liens symboliques ou ne peuvent pas être sécurisés. Cela conserve les contrôles de `ProductionSecurity` après chaque déploiement. Les fichiers runtime ignorés par Git gardent leurs permissions propres (`.env` en `0600`, profil approuvé en `0400`, données privées au propriétaire seul) et ne sont ni lus ni réécrits par ce script.
+
 ## Transfert privé des données
 
 Depuis le poste local, transférer le dump, le profil, le manifeste de stock et l’archive média par SCP vers le répertoire personnel SSH. Ne pas transférer `.env`, les identifiants MySQL ni les secrets. Le dump et le profil doivent rester dans `storage/app/private`, jamais dans `public_html` accessible par HTTP.
