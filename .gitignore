@@ -31,7 +31,17 @@ Thumbs.db
 
 # Generated evidence and immutable runtime originals stay on disk, outside Git.
 /output/
-/public/media/
+/public/media/*
+!/public/media/home/
+/public/media/home/*
+!/public/media/home/interieur-display.webp
+!/public/media/home/entrepot-display.webp
+!/public/media/home/livraison-display.webp
+!/public/media/home/chauffage-display.webp
+!/public/media/home/mobilier-display.webp
+!/public/media/home/froid-display.webp
+!/public/media/home/lavage-display.webp
+!/public/media/home/cafe.webp
 /storage/app/catalogue/
 __pycache__/
 *.py[cod]
