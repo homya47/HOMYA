@@ -16,7 +16,7 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
+# Vite assets are committed for Hostinger, where Node.js is unavailable over SSH.
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
@@ -42,6 +42,9 @@ Thumbs.db
 !/public/media/home/froid-display.webp
 !/public/media/home/lavage-display.webp
 !/public/media/home/cafe.webp
+!/public/media/payments/
+/public/media/payments/*
+!/public/media/payments/instant-transfer.svg
 /storage/app/catalogue/
 __pycache__/
 *.py[cod]
