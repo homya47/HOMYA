@@ -49,6 +49,22 @@ final class PrivateLocalFiles
         }
     }
 
+    /** Restore a private mode only for an existing, non-link path owned by this runtime user. */
+    public static function secureMode(string $path, int $mode, bool $directory = false): void
+    {
+        clearstatcache(true, $path);
+        $s = @lstat($path);
+        if ($s === false || is_link($path) || ($directory ? ! is_dir($path) : ! is_file($path))
+            || ! function_exists('posix_geteuid') || $s['uid'] !== posix_geteuid()) {
+            throw new RuntimeException('PRIVATE_FILE_INVALID');
+        }
+        if (! @chmod($path, $mode)) {
+            throw new RuntimeException('PRIVATE_FILE_MODE_REPAIR_FAILED');
+        }
+
+        self::requireMode($path, $mode, $directory);
+    }
+
     public static function makeDirectory(string $path): void
     {
         if (file_exists($path) || is_link($path) || ! @mkdir($path, 0700)) {

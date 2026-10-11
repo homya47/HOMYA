@@ -56,9 +56,11 @@ final class CatalogueReadProfile
     public static function loadApproved(): self
     {
         $parent = PrivateLocalFiles::path(base_path(), 'storage/app/private/catalogue-profiles');
-        PrivateLocalFiles::requireMode($parent, 0700, true);
+        // Hostinger may restore ignored runtime files with default modes during Git publish.
+        // Narrow permissions before reading, while still refusing links and foreign ownership.
+        PrivateLocalFiles::secureMode($parent, 0700, true);
         $path = PrivateLocalFiles::path($parent, self::LOT.'.json');
-        PrivateLocalFiles::requireMode($path, 0400);
+        PrivateLocalFiles::secureMode($path, 0400);
         $text = file_get_contents($path);
         if (! is_string($text) || hash('sha256', $text) !== self::PROFILE) {
             throw new RuntimeException('PROFILE_NOT_APPROVED');
