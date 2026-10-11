@@ -28,7 +28,7 @@ class MerchantFeedTest extends TestCase
         $this->product = ['slug' => 'fixture', 'name' => 'Produit & modèle', 'reference' => 'REF', 'brand' => 'Marque',
             'description' => 'Description €', 'price_cents' => 12345, 'currency' => 'EUR', 'condition' => 'neuf',
             'has_variants' => false, 'variants' => [], 'issues' => [], 'specifications' => [],
-            'images' => [['local_url' => '/media/catalogue/fixture.png', 'width' => 500, 'height' => 500]]];
+            'images' => [['local_url' => '/media/catalogue/aaaaaaaaaaaaaaaaaaaaaaaa.png', 'width' => 500, 'height' => 500]]];
         $this->reviews = tempnam(sys_get_temp_dir(), 'homya-merchant-');
         File::ensureDirectoryExists($this->reviews.'-sessions', 0700);
         file_put_contents($this->reviews, json_encode(['fixture' => ['approved' => true,
@@ -81,7 +81,7 @@ class MerchantFeedTest extends TestCase
         foreach (['v1' => 'Blanc', 'v2' => 'Noir'] as $id => $title) {
             $review['variants'][$id] = ['approved' => true, 'option_titles' => ['fr' => $title],
                 'attributes' => ['fr' => ['color' => $title]], 'image_verified' => true,
-                'images' => ['/media/catalogue/fixture.png'], 'gtin' => $id === 'v1' ? '4006381333931' : '5012345678900',
+                'images' => ['/media/catalogue/aaaaaaaaaaaaaaaaaaaaaaaa.png'], 'gtin' => $id === 'v1' ? '4006381333931' : '5012345678900',
                 'title_source' => 'trained_algorithmic_media', 'description_source' => 'default'];
         }
         foreach (app(MerchantProducts::class)->variantProducts($this->product, $review, 'fr') as [$variant]) {
@@ -159,7 +159,7 @@ class MerchantFeedTest extends TestCase
             $this->assertStringEndsWith('?variant=v'.($index + 1), $variant['url']);
             $this->assertSame($variant['url'], $variant['offers']['url']);
             $this->assertSame('123.45', $variant['offers']['price']);
-            $this->assertSame(['https://homya.eu/media/catalogue/fixture.png'], $variant['image']);
+            $this->assertSame(['https://homya.eu/media/catalogue/aaaaaaaaaaaaaaaaaaaaaaaa.png'], $variant['image']);
         }
         $review['variants']['v2']['image_verified'] = false;
         File::ensureDirectoryExists($this->reviews.'-sessions', 0700);
@@ -181,6 +181,21 @@ class MerchantFeedTest extends TestCase
         $this->assertSame('new', (string) $item->condition);
         $this->assertSame('in_stock', (string) $item->availability);
         $response->assertDontSee('1000')->assertDontSee('fingerprint');
+    }
+
+    public function test_undersized_display_photos_are_excluded_from_merchant_feed(): void
+    {
+        $small = ['local_url' => '/media/catalogue/'.str_repeat('a', 24).'.jpg', 'width' => 499, 'height' => 600];
+        $valid = ['local_url' => '/media/catalogue/'.str_repeat('b', 24).'.jpg', 'width' => 500, 'height' => 500];
+        $this->product['images'] = [$small, $valid];
+        $merchant = app(MerchantProducts::class);
+        $review = ['approved' => true, 'fingerprints' => ['fr' => MerchantProducts::fingerprint($this->product)],
+            'gtin' => '4006381333931', 'title_source' => 'default', 'description_source' => 'default'];
+
+        $this->assertSame([], $merchant->problems($this->product, $review, 'fr'));
+        $xml = simplexml_load_string($merchant->xml([[$this->product, $review, true]], 'fr'))->channel->item->children('http://base.google.com/ns/1.0');
+        $this->assertSame('https://homya.eu'.$valid['local_url'], (string) $xml->image_link);
+        $this->assertSame('', (string) $xml->additional_image_link);
     }
 
     public function test_changed_price_invalidates_the_review_instead_of_publishing_a_mismatch(): void

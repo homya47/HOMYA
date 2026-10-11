@@ -62,15 +62,16 @@ return [
             'engine' => 'InnoDB', 'options' => [],
         ],
 
-        // Dedicated credentials; never inherit the immutable catalogue reader's permissions.
+        // Dedicated connection; Hostinger can reuse DB_* for commerce, while local
+        // XAMPP keeps its explicit HOMYA_COMMERCE_DB_* settings.
         'commerce' => [
             'driver' => 'mariadb',
-            'host' => env('HOMYA_COMMERCE_DB_HOST', '127.0.0.1'),
-            'port' => env('HOMYA_COMMERCE_DB_PORT', '3307'),
-            'database' => env('HOMYA_COMMERCE_DB_DATABASE', ''),
-            'username' => env('HOMYA_COMMERCE_DB_USERNAME', ''),
-            'password' => env('HOMYA_COMMERCE_DB_PASSWORD', ''),
-            'unix_socket' => env('HOMYA_COMMERCE_DB_SOCKET', '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock'),
+            'host' => env('HOMYA_COMMERCE_DB_HOST') ?: env('DB_HOST', '127.0.0.1'),
+            'port' => env('HOMYA_COMMERCE_DB_PORT') ?: env('DB_PORT', '3306'),
+            'database' => env('HOMYA_COMMERCE_DB_DATABASE') ?: env('DB_DATABASE', ''),
+            'username' => env('HOMYA_COMMERCE_DB_USERNAME') ?: env('DB_USERNAME', ''),
+            'password' => env('HOMYA_COMMERCE_DB_PASSWORD') ?: env('DB_PASSWORD', ''),
+            'unix_socket' => env('HOMYA_COMMERCE_DB_SOCKET', env('DB_SOCKET')) ?: null,
             'charset' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '', 'strict' => true, 'engine' => 'InnoDB',
         ],

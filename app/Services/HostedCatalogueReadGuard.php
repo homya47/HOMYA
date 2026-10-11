@@ -63,9 +63,11 @@ final class HostedCatalogueReadGuard
             || ($reader['driver'] ?? null) !== 'mariadb' || ($reader['url'] ?? null) !== null
             || ! in_array($reader['host'] ?? null, ['localhost', '127.0.0.1'], true)
             || (string) ($reader['port'] ?? '') !== '3306'
-            || ! is_string($reader['database'] ?? null) || $reader['database'] === ''
-            || ($reader['database'] ?? null) !== ($writer['database'] ?? null)
+            || ! is_string($reader['database'] ?? null)
+            || ! preg_match('/^[A-Za-z0-9_]+$/D', $reader['database'])
+            || ! is_string($writer['database'] ?? null) || $writer['database'] === ''
             || ! is_string($reader['username'] ?? null) || $reader['username'] === ''
+            || ! is_string($writer['username'] ?? null) || $writer['username'] === ''
             || ($reader['username'] ?? null) === ($writer['username'] ?? null)
             || ! is_string($reader['password'] ?? null) || $reader['password'] === ''
             || ($reader['charset'] ?? null) !== 'utf8mb4' || ($reader['collation'] ?? null) !== 'utf8mb4_bin'
