@@ -3,10 +3,7 @@
 Options -Indexes
 
 <IfModule mod_authz_core.c>
-    <RequireAny>
-        Require local
-        Require expr "%{HTTP_HOST} =~ m#^(?:www\.)?homya\.eu(?::(?:80|443))?$#"
-    </RequireAny>
+    Require all granted
 </IfModule>
 
 <IfModule mod_rewrite.c>
@@ -17,6 +14,10 @@ Options -Indexes
     RewriteRule "^(?:app|bootstrap|config|database|docs|lang|node_modules|resources|routes|scripts|storage|tests|vendor|output)(?:/|$)" - [F,L,NC]
     RewriteRule "^(?:artisan|composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit(?:\.mariadb)?\.xml|vite\.config\.[^/]+)$" - [F,L,NC]
     RewriteRule "\.(?:sql|log|env|ini|bak|backup|orig|sh|py|pl|cgi|phar|phtml)(?:/|$)" - [F,L,NC]
+
+    # Do not expose the project through an unexpected hostname.
+    RewriteCond %{HTTP_HOST} !^(?:www\.)?homya\.eu(?::(?:80|443))?$ [NC]
+    RewriteRule ^ - [F,L]
 
     # Normalize the optional www host and use HTTPS for the production site.
     RewriteCond %{HTTP_HOST} ^www\.homya\.eu(?::(?:80|443))?$ [NC]

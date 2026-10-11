@@ -62,8 +62,8 @@ return [
             'engine' => 'InnoDB', 'options' => [],
         ],
 
-        // Dedicated connection; Hostinger can reuse DB_* for commerce, while local
-        // XAMPP keeps its explicit HOMYA_COMMERCE_DB_* settings.
+        // Dedicated connection; on Hostinger it can reuse DB_* writer credentials,
+        // while local XAMPP keeps its explicit HOMYA_COMMERCE_DB_* settings.
         'commerce' => [
             'driver' => 'mariadb',
             'host' => env('HOMYA_COMMERCE_DB_HOST') ?: env('DB_HOST', '127.0.0.1'),
