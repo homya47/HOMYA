@@ -9,7 +9,7 @@ Ce guide prépare l’instance Hostinger `homya.eu` à partir des sources HOMYA 
 - L’inventaire contient 3 709 références vendables, 3 709 000 unités déclarées et aucune réservation initiale. Les clés étrangères des messages et expéditions ont été vérifiées.
 - Le checkout, les commandes différées et l’inventaire sont activés. Le site public permet de constituer un panier et de valider une commande qui reste en attente de règlement, avec une réservation limitée à 72 heures. Aucun paiement réel n’a été activé ni encaissé.
 - Le virement demeure désactivé jusqu’à réception et configuration de l’IBAN par l’utilisateur. Les instructions de règlement doivent alors être complétées avant d’annoncer le paiement par virement comme disponible.
-- La tâche Hostinger `* * * * * /usr/bin/php /home/u429557141/domains/homya.eu/public_html/artisan schedule:run` a été créée. Son premier résultat dans hPanel reste à contrôler.
+- La tâche Hostinger `* * * * * /usr/bin/php /home/u429557141/domains/homya.eu/public_html/artisan schedule:run` a été créée ; hPanel confirme son exécution du 11 octobre à 02:04:01 avec `homya:expire-bank-transfers --apply` terminé (`DONE`, 232,29 ms).
 - Une sauvegarde SQL privée de la base commerce a été créée avant les migrations, contrôlée et conservée dans `storage/app/private/hostinger-import/pre-commerce-migration-20261011.sql` (mode `0600`, SHA-256 `211d0dbfe609abb7adc8f315699360778fe050b9ff11609eb7722093fa20bc95`). La sauvegarde complète déclenchée dans hPanel était encore indiquée « En cours » lors du dernier contrôle.
 
 ## État vérifié
@@ -83,4 +83,4 @@ La commande refuse de remplacer un inventaire ou des commandes existants. Vérif
 - Configurer une tâche cron Hostinger chaque minute pour `php artisan schedule:run` afin que les réservations expirent comme prévu ; confirmer son résultat dans hPanel.
 - Merchant Center/Search Console demandent une vérification et une validation par Google ; le bon fonctionnement local ne signifie pas que Google a accepté ou indexé le flux.
 
-L’instance publique sert le catalogue et le parcours de commande différée. L’activation du paiement par virement et la confirmation complète de l’expiration automatique restent conditionnées respectivement à la configuration de l’IBAN et au contrôle du premier résultat cron dans hPanel.
+L’instance publique sert le catalogue et le parcours de commande différée. L’activation du paiement par virement reste conditionnée à la configuration de l’IBAN ; l’expiration automatique est confirmée par le résultat cron ci-dessus.
