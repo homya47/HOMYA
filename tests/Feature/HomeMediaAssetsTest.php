@@ -16,6 +16,15 @@ class HomeMediaAssetsTest extends TestCase
         $this->assertNotFalse(getimagesize($path), "The homepage image {$filename} must be a valid image.");
     }
 
+    public function test_instant_transfer_logo_is_available_as_a_valid_svg_asset(): void
+    {
+        $path = public_path('media/payments/instant-transfer.svg');
+
+        $this->assertFileExists($path);
+        $this->assertStringContainsString('<svg ', file_get_contents($path));
+        $this->assertStringContainsString('viewBox="0 0 48 48"', file_get_contents($path));
+    }
+
     public static function homeImages(): array
     {
         return [

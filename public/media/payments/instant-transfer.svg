@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Virement instantané</title>
+  <path d="M5 18.5 24 7l19 11.5H5Z" fill="#173D32"/>
+  <path d="M9 21h30M7 39h34M10 36V23m9 13V23m10 13V23m9 13V23M5 42h38" stroke="#173D32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M33 4v8m0 0-4-4m4 4 4-4" stroke="#B9522C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
